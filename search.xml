@@ -52,5 +52,8 @@
 <h5 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h5><p>change buffer的merge操作，先把change buffer的操作更新到内存的数据页中，此操作写到redo log中，mysql未宕机，redo log写满后需要移动check point点时，通过判断内存中数据和磁盘是否一致即是否是脏页来刷新到磁盘中，当mysql宕机后没有内存即没有脏页,通过redo log来恢复。</p>
 <h5 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h5><p>redo log是物理日志，记录的是数据页的修改，但是如果数据页不在内存中怎么办呢？都没有去修改数据页，redo log中记什么？所以这时候change buffer登场了，如果修改的不是唯一索引，而是普通索引，不用再去磁盘随机IO了，直接将这个修改记录在change buffer中。也可以说，数据页在内存，那就修改数据页，写redo log，如果数据页不在内存，修改的也不是唯一索引，而是普通索引，那就写change buffer。并把这个change buffer写入到redo log，防止更新丢失。</p>
 ]]></content>
+      <tags>
+        <tag>Mysql</tag>
+      </tags>
   </entry>
 </search>
