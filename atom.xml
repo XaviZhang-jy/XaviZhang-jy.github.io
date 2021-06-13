@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>岛</title>
-  <icon>https://www.gravatar.com/avatar/71ccfa8e8552c9d8775d68b75462bc16</icon>
-  <subtitle>面朝大海，春暖花开</subtitle>
+  <title>life is a movie</title>
+  <icon>https://www.gravatar.com/avatar/4f8bf2c89483430dda033ef46da27e5b</icon>
+  <subtitle>或许，一起喝杯马黛茶吗</subtitle>
   <link href="https://shen-yu.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://shen-yu.gitee.io/"/>
-  <updated>2021-06-13T08:31:09.443Z</updated>
+  <updated>2021-06-13T13:47:36.359Z</updated>
   <id>https://shen-yu.gitee.io/</id>
   
   <author>
-    <name>Eric Shen</name>
-    <email>shenyu@hotmail.com</email>
+    <name>Xavi</name>
+    <email>532003566@qq.com</email>
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于我</title>
+    <link href="https://shen-yu.gitee.io/2021/about/"/>
+    <id>https://shen-yu.gitee.io/2021/about/</id>
+    <published>2021-06-13T13:45:49.000Z</published>
+    <updated>2021-06-13T13:47:36.359Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>我是Xavi，如果累了，来杯马黛茶吧！</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    
+    <category term="think" scheme="https://shen-yu.gitee.io/tags/think/"/>
+    
+  </entry>
   
   <entry>
     <title>MySQL索引类型都有啥？</title>
