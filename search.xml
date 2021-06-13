@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Mysql索引类型都有啥？</title>
+    <title>MySQL索引类型都有啥？</title>
     <url>/2021/06/12/Mysql%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="数据库的索引类型"><a href="#数据库的索引类型" class="headerlink" title="数据库的索引类型"></a>数据库的索引类型</h1><h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><ul>
 <li>普通索引允许索引内容有重复数据，任务是为了加快对数据的访问速度。没什么特别的要求，只要它是查询的条件，就可以给它加上普通索引</li>
@@ -52,8 +52,11 @@
 <h5 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h5><p>change buffer的merge操作，先把change buffer的操作更新到内存的数据页中，此操作写到redo log中，mysql未宕机，redo log写满后需要移动check point点时，通过判断内存中数据和磁盘是否一致即是否是脏页来刷新到磁盘中，当mysql宕机后没有内存即没有脏页,通过redo log来恢复。</p>
 <h5 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h5><p>redo log是物理日志，记录的是数据页的修改，但是如果数据页不在内存中怎么办呢？都没有去修改数据页，redo log中记什么？所以这时候change buffer登场了，如果修改的不是唯一索引，而是普通索引，不用再去磁盘随机IO了，直接将这个修改记录在change buffer中。也可以说，数据页在内存，那就修改数据页，写redo log，如果数据页不在内存，修改的也不是唯一索引，而是普通索引，那就写change buffer。并把这个change buffer写入到redo log，防止更新丢失。</p>
 ]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
       <tags>
-        <tag>Mysql</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
 </search>
