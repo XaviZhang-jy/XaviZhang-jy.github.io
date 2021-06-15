@@ -6,7 +6,7 @@
   <link href="https://shen-yu.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://shen-yu.gitee.io/"/>
-  <updated>2021-06-13T15:06:56.395Z</updated>
+  <updated>2021-06-15T13:13:35.300Z</updated>
   <id>https://shen-yu.gitee.io/</id>
   
   <author>
@@ -17,13 +17,133 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>三次握手和四次挥手</title>
+    <link href="https://shen-yu.gitee.io/2021/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/"/>
+    <id>https://shen-yu.gitee.io/2021/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</id>
+    <published>2021-06-15T13:11:29.000Z</published>
+    <updated>2021-06-15T13:13:35.300Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h3 id="TCP三次握手的过程（含状态转换，报文中的参数）"><a href="#TCP三次握手的过程（含状态转换，报文中的参数）" class="headerlink" title="TCP三次握手的过程（含状态转换，报文中的参数）"></a><code>TCP</code>三次握手的过程（含状态转换，报文中的参数）</h3><ul><li><p>最开始，服务器端和客户端都会创建传输控制块：TCP连接表、指向发送和接收缓存的指针、只想重传队列的指针、当前的发送和接收序号等。</p></li><li><p>第一次握手：</p><ul><li>客户进程向服务器进程发送<code>TCP连接请求报文段</code>，然后客户端自己进入<code>同步已发送状态(SYN-SENT)</code>,报文首部中有个<code>同步位SYN</code>在这里被设置为<code>1</code>（为1表示这是一个TCP连接请求报文段），<code>序号字段seq</code>被设置为<code>x</code>（这个x是一个初始值，是TCP客户进程选择的一个初始序号）。 <em>TCP规定 SYN 为1的报文段不能携带数据，但需要小号一个序号。</em></li><li>服务器端是被动建立连接，此时处于监听状态</li></ul></li><li><p>第二次握手：</p><ul><li>服务器端接收到<code>TCP连接请求报文段</code>后进入<code>同步已接收状态</code>，并向服务器端发送<code>TCP连接请求确认报文段</code>，报文首部<code>同步位SYN设置为1，确认位ACK也设置为1</code>（表示这是一个TCP连接请求确认报文段），<code>序号字段seq</code>被设置了一个初始值y（TCP服务器进程选择的初始序号），<code>确认号ack字段</code>被设置成x+1，来表示收到了之前序号为x的连接请求。</li></ul></li><li><p>第三次握手：</p><ul><li><p>客户端收到服务器发来的<code>确认报文段</code>后，还要发送一个<code>普通的TCP确认报文段</code>，同时服务器端进入<code>连接已建立状态</code>，该报文段的<code>首部确认位ACK</code>被设置为1，<code>序号字段seq</code>被设置为x+1，<code>确认号ack</code>被设置为y+1</p><p><strong>TCP规定，普通的TCP确认报文段可以携带数据，如果不携带数据，就不消耗序号。</strong></p></li><li><p>服务器端接收到普通的确认报文段后进入连接状态</p></li></ul></li></ul><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d37a587af20544e3a8db6411d196aac7~tplv-k3u1fbpfcp-watermark.image" alt="image-20210330235638869.png"></p><h3 id="TCP四次挥手的过程（含状态转换，报文中的参数）"><a href="#TCP四次挥手的过程（含状态转换，报文中的参数）" class="headerlink" title="TCP四次挥手的过程（含状态转换，报文中的参数）"></a><code>TCP</code>四次挥手的过程（含状态转换，报文中的参数）</h3><ul><li><p>第一次挥手：</p></li><li><p>客户端进程向服务器进程发送<code>TCP连接释放报文段</code>，并进入<code>终止等待1 FIN-WAIT1</code>状态。该报文段首部中的<code>终止位FIN=1</code>,<code>确认位ACK=1</code>,表明这是一个TCP连接释放报文段。<strong>同时，这也是对之前收到的报文段的确认。</strong>序号seq字段的值设置位u，<code>u是TCP客户进程之前最后传送的数据的最后一个字节的序号+1</code>，FIN位1的报文段不带数据也要消耗报文段。<code>确认号ack=v，v表示TCP客户进程之前最后接收到的数据的最后一个字节的序号+1</code>。</p></li><li><p>第二次挥手：</p><ul><li>TCP服务器进程接收到连接释放报文段后，发送一个<code>普通的TCP确认报文段</code>并进入<code>关闭等待状态 CLOSE-WAIT</code>。该报文段的首部<code>确认位ACK=1</code>，表明这是一个普通的TCP确认报文段，<code>序号seq为v</code>，与第一次挥手的确认号匹配，<code>确认号ack=u+1</code>，是对第一次挥手的序号的确认。</li></ul><p><strong>此时，从TCP客户端到服务器端的进程就释放了。这时候TCP客户进程已经没有数据发送了，但是如果服务器还要发数据给客户端，客户进程还要接收。</strong></p></li><li><p>第三次挥手:</p><ul><li>TCP客户进程接收到TCP确认报文段后就进入<code>终止等待2状态 FIN-WAIT2</code>，等待TCP服务器发送<code>TCP连接释放报文段</code>。</li><li>这时候TCP服务器进程发送<code>TCP连接释放报文段</code>，并进入<code>最后确认状态 LAST-ACK</code>。该报文段首部中的<code>终止位FIN=1</code>,<code>确认位ACK=1</code>,表明这是一个TCP连接释放报文段。<strong>同时，这也是对之前收到的报文段的确认。</strong>假定seq=w，不是u+1的原因是：可能在两次挥手后，服务器又发送了一些数据。确认号ack=u+1，这是对第一次挥手的重复确认。</li></ul></li><li><p>第四次挥手：</p><ul><li>客户端接收连接释放报文段后，发送普通的确认保文段，并进入时间等待状态 TIME-WAIT。该报文段的首部<code>确认位ACK=1</code>，表明这是一个普通的TCP确认报文段，<code>序号seq为u+1</code>，是因为第一次挥手消耗了一个序号，<code>确认号ack=w+1</code>，是对第三次挥手的序号的确认。</li><li>服务器接收到该报文段进入关闭状态，而客户进程要等<code>2MSL-&gt;最长报文段寿命，RFC793文档建议为2分钟</code>，也就是4分钟，才能进入关闭状态。</li></ul></li></ul><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ce5e437f8d7048cc9b1da73796a2d983~tplv-k3u1fbpfcp-watermark.image" alt="image-20210331173541393.png"></p><h3 id="为什么不是两次握手？"><a href="#为什么不是两次握手？" class="headerlink" title="为什么不是两次握手？"></a>为什么不是两次握手？</h3><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a6898f5a03f4a668eedf625978fe34d~tplv-k3u1fbpfcp-watermark.image" alt="image-20210331132623522 - 副本.png"> </p><ul><li>两次握手，服务器端接收到第一次连接请求后就进入连接确认，客户端也不会发送普通确认报文段。</li><li>如果第一次的TCP连接请求在网络中滞留了，那么他就会使得服务器端再一次直接进入连接已确认状态，而此时的客户端时关闭的，客户端无法被动建立连接，接收不到服务器的连接确认报文段，浪费网络资源。</li></ul><h3 id="第三次握手失败了怎么办？"><a href="#第三次握手失败了怎么办？" class="headerlink" title="第三次握手失败了怎么办？"></a>第三次握手失败了怎么办？</h3><ul><li>在第二次握手后，服务器端会设置一个定时器，在等待客户端发回的第三次握手确认报文段。如果超时，则重传。如果超过规定次数（默认是5次），则服务器关闭这个连接。但是这时候，客户端认为该连接已建立，如果客户端向服务器端发送数据，服务器端以RST包回应<ul><li>RST：RST标示复位、用来异常的关闭连接。<pre><code>     1. 发送RST包关闭连接时，不必等缓冲区的包都发出去，直接就丢弃缓冲区中的包，发送RST。         2. 而接收端收到RST包后，也不必发送ACK包来确认。</code></pre></li></ul></li></ul><h3 id="为什么挥手要四次，而握手要三次？"><a href="#为什么挥手要四次，而握手要三次？" class="headerlink" title="为什么挥手要四次，而握手要三次？"></a>为什么挥手要四次，而握手要三次？</h3><ul><li><p>在TCP建立连接时，有三次握手，第一次握手SYN=1时发起连接的同步位；第二次握手时，SYN=1和ACK=1同时被发送，也就是对<code>上一次收到的连接请求报文段的确认</code>和<code>这一次的连接请求</code>同时发送，也就是请求和确认在同一份报文中都有体现。</p></li><li><p>但是第二次挥手，确认位ACK=1和终止位FIN=1没有一起发送，只发送了对第一次挥手的请求确认报文。因为服务器的数据可能没有发送完，所以需要在数据发送完后，再一次发送TCP连接释放请求。然后彻底释放连接。不能把第二次和第三次整合在一起。</p><p>不能把第四次挥手去掉，如果第三次挥手报文丢失，没有回应。超时重传没办法开，没办法验证对方收到了该条报文。</p></li></ul><h3 id="为什么TIME-WAIT状态需要经历2MSL才能转换到CLOSE状态？"><a href="#为什么TIME-WAIT状态需要经历2MSL才能转换到CLOSE状态？" class="headerlink" title="为什么TIME_WAIT状态需要经历2MSL才能转换到CLOSE状态？"></a>为什么<code>TIME_WAIT</code>状态需要经历<code>2MSL</code>才能转换到<code>CLOSE</code>状态？</h3><ul><li>如果第四次挥手丢失了，将导致第三次握手，也就是服务器的连接释放报文段的超时重传。但是如果这时候客户端已经关闭了，就接受不到了，服务器就会不断地重传，一直处于最后确认状态。</li><li>另外，TCP客户进程发送完最后一个TCP确认报文段后，再经过2MSL时间，就可以把本次连接所产生的所以报文段都从网络中消失，防止下一个新的TCP连接中出现旧的报文段（这里的意思是有旧的报文段在网络中延误了吗）。</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="TCP" scheme="https://shen-yu.gitee.io/categories/TCP/"/>
+    
+    
+    <category term="计算机网络" scheme="https://shen-yu.gitee.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TCP如何保证可靠传输</title>
+    <link href="https://shen-yu.gitee.io/2021/TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93/"/>
+    <id>https://shen-yu.gitee.io/2021/TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93/</id>
+    <published>2021-06-15T13:09:44.000Z</published>
+    <updated>2021-06-15T13:10:30.735Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h3 id="TCP如何保证可靠传输？"><a href="#TCP如何保证可靠传输？" class="headerlink" title="TCP如何保证可靠传输？"></a><code>TCP</code>如何保证可靠传输？</h3><ul><li>TCP基于<code>以字节为单位的滑动窗口</code>来实现可靠传输</li><li>如何描述发送窗口的状态？（使用三个指针来分别指向相应的字节序号）<ul><li>小于P1的是已发送并已收到确认的部分</li><li>大于等于P3的是不允许发送的</li><li>P3-P1=发送窗口的尺寸</li><li>P2-P1=已发送但尚未收到确认的字节数</li><li>P3-P2=允许发生但尚未发送的字节数（又称为可用窗口或有效窗口）</li></ul></li><li>虽然发送方的发送窗口时根据接收方的接受窗口设置的，但在同一时刻，<code>发送方的发送窗口并不总是和接收方的接收窗口一样大</code><ul><li>网络传送窗口值需要经历一定的时间之后，而且这个时间还是不确定的</li><li>发送方也有可能根据网络当时的拥塞情况适当减小自己的发送窗口尺寸<ul><li>如果接收方把不按序到达的数据一律丢弃，那么接受窗口的管理将会比较简单，但这样对网络资源的利用不利，因为发送方会重复传送较多的数据。</li><li>TCP通常对不按序到达的数据是先临时存放在接受窗口中，等到字节流中所缺少的字节到了后，再给到<code>上层的应用进程</code></li></ul></li><li>TCP要求接收方必须有<code>累计确认和捎带确认机制</code>，减少传输开销。接收方可以在合适的时候发送确认，也可以在自己有数据要发生时，顺便一起把确认信息带上<ul><li><code>接收方不应过分推迟发送确认</code>，否则会导致发送方不必要的超时重传，这反而浪费了网络资源。TCP标准规定，确认推迟的时间不应超过0.5s。若收到一连串具有最大长度的报文段，则必须每隔一个报文段发送一个确认[RFC 1122]</li><li>捎带确认很少发生，大多数应用程序很少同时两个方向上发送数据</li></ul></li><li>TCP的通信时全双工通信。</li></ul></li><li>对于不按序到达的数据应如何处理，TCP并无明确规定</li><li><strong>总结</strong>：<ol><li><strong>校验和</strong>：发送的数据包的二进制相加然后取反，<strong>目的是检测数据在传输过程中的任何变化</strong>。如果收到段的检验和有差错，TCP将丢弃这个报文段和不确认收到此报文段。 </li><li><strong>编号</strong>：TCP给发送的<strong>每一个包进行编号</strong>，接收方<strong>对数据包进行排序</strong>，把有序数据传送给应用层。 </li><li><strong>超时重传</strong>：当TCP<strong>发出一个段后，它启动一个定时器</strong>，等待目的端确认收到这个报文段。如果不能及时收到一个确认，将重发这个报文段。 </li><li><strong>滑动窗口</strong></li><li><strong>拥塞控制</strong><h3 id="TCP的流量控制"><a href="#TCP的流量控制" class="headerlink" title="TCP的流量控制"></a><code>TCP</code>的流量控制</h3></li></ol></li><li>流量控制说白了就是让发送方不要传的那么快，太快了来不及接收</li><li>利用<code>滑动窗口</code>可以很方便地在TCP连接上实现对发送方的流量控制</li></ul><p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d4a4e28a42e54eee9fc028e5a3c8196f~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328162924958 - 副本.png"></p><ul><li><code>seq=1 DATA</code>：seq取值1，表示TCP报文段数据载荷的第一个字节的序号是1</li><li><code>DATA</code>表示该报文段为TCP数据报文段</li></ul><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/35f1f2a9f617428d8f37edc8dfac3c16~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328163004482 - 副本.png"></p><ul><li><code>ACK</code>：TCP报文段首部中的标志位，取值1表示这是TCP确认报文段</li><li><code>ack</code>：TCP报文段首部中的确认号字段，取值201表示序号201以前都正确接受，等待接受201后的数据</li><li><code>rwnd</code>：TCP报文段首部中的窗口字段，取值300表示，接受窗口改为300</li><li>只要TCP连接的一方，收到对方的<code>零窗口通知</code>，就启动一个<code>持续计时器</code>，若超时，就发送一个<code>零窗口探测报文（只携带1字节数据）</code>，接收方在收到<code>探测报文段</code>时，给出自己的<code>接收窗口值</code>。若依然是0，就重启计时器。</li><li>事实上，TCP规定，即使接收窗口为0，也必须接收<code>零窗口探测报文段、确认报文段、带有紧急数据的报文段</code>。</li><li><code>零窗口探测报文段</code>也有重传计时器，超时就重传。 </li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="TCP" scheme="https://shen-yu.gitee.io/categories/TCP/"/>
+    
+    
+    <category term="计算机网络" scheme="https://shen-yu.gitee.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TCP拥塞控制的过程（四个状态）</title>
+    <link href="https://shen-yu.gitee.io/2021/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%88%E5%9B%9B%E4%B8%AA%E7%8A%B6%E6%80%81%EF%BC%89/"/>
+    <id>https://shen-yu.gitee.io/2021/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%88%E5%9B%9B%E4%B8%AA%E7%8A%B6%E6%80%81%EF%BC%89/</id>
+    <published>2021-06-15T13:08:05.000Z</published>
+    <updated>2021-06-15T13:10:41.510Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h5 id="TCP拥塞控制的过程。（四个状态都要解释清楚）"><a href="#TCP拥塞控制的过程。（四个状态都要解释清楚）" class="headerlink" title="TCP拥塞控制的过程。（四个状态都要解释清楚）"></a><code>TCP</code>拥塞控制的过程。（四个状态都要解释清楚）</h5><ul><li><p>在某段时间里，对网络中某一资源的需求超过可用范围，也就是供不应求，网络性能就会下降。这种状况，就是<code>拥塞</code></p></li><li><p><strong>研究的前提</strong></p><ol><li><strong>数据是单方向传送的，另一个方向只传送确认</strong></li><li><strong>接收方总是有足够大的缓存空间，因而发送方发送窗口的大小由网络的拥塞程度来决定</strong></li><li><strong>以最大报文段MSS的个数为讨论问题的单位，而不是以字节为单位</strong></li></ol></li><li><p>若出现拥塞而不控制，整个网络的吞吐量将随输入负荷的增大而下降</p></li></ul><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d20a71df62f74e7591c75281e62137b5~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328165046096 - 副本.png"></p><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/718726b75e764e218bf46cf44f57ab06~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328171110511.png"></p><ul><li><p>发送方要维护一个<code>拥塞窗口cwnd</code>的状态变量，其值取决于<strong>网络的拥塞程度</strong>，并且<strong>动态变化</strong></p><ul><li>拥塞窗口<code>cwnd的维护原则</code>：只要网络<strong>没有出现拥塞</strong>，拥塞窗口就在<strong>增大</strong>一些；只要出现<strong>拥塞</strong>，拥塞窗口就<strong>减小一些</strong></li><li>判断出现<code>网络拥塞的依据</code>：没有按时收到应当到达的确认报文（即发生超时重传）</li></ul></li><li><p>发送方将拥塞窗口作为发送窗口swnd，即swnd=cwnd</p></li><li><p>维护一个<code>慢开始门限ssthresh</code>状态变量：</p><ul><li>当cwnd&lt;ssthresh时，使用慢开始算法</li><li>当cwnd&gt;ssthresh时，停止使用慢开始算法而改用拥塞避免算法</li><li>当cwnd=ssthresh时，既可以使用慢开始算法，也可以使用拥塞避免算法</li></ul></li><li><p>四种拥塞控制算法：慢开始(slow-start)、拥塞避免(congestion avoidance)、快重传(fast retransmit)、快恢复(fast recovery)</p></li></ul><p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8e83bbc716e34c95b8fd27dadda5873d~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328172007944 - 副本.png"></p><ul><li><p>若重传计时器超时，则判断网络可能出现拥塞：</p><ol><li>将ssthresh值更新为发生拥塞时cwnd的一半</li><li>将cwnd值减小为1，并重新开始慢开始算法</li></ol></li><li><p>慢开始</p><ul><li>慢开始算法下，拥塞窗口数量随着传播轮次指数增长，不断翻倍</li><li>慢开始是指一开始的报文段少，而不是拥塞窗口增长速度满</li></ul></li><li><p>拥塞避免</p><ul><li>拥塞避免算法下，拥塞窗口数量随着传播轮次，不断+1，线性增长</li><li>拥塞避免算法无法完全避免拥塞，只是让拥塞窗口线性增长，网络不容易出现拥塞</li></ul><p><strong>—————慢开始和拥塞避免算法是最开始出现的—————</strong></p><p><strong>有时个别报文段丢失会被误认为发送拥塞，错误减小拥塞算法，降低效率。为了解决这个问题，增加了后两个算法</strong></p></li><li><p>快重传</p><ul><li><p>快重传算法<code>可以让发送方尽快知道发生了个别报文段的丢失</code></p></li><li><p>快重传就是让<code>发送方尽快开始重传</code>，而不是<code>等待超时重传计时器超时</code>再重传</p><ul><li>要求接收方不要等待发送数据时才进行稍待确认，而是要<code>立即确认</code>。</li><li>即使收到了失序的报文段也要立即发出对已收到的报文段的<code>重复确认</code>。</li><li>发送方一旦受到了三个连续的重复确认，就将相应的报文段<code>立即重传</code>，而不是等待该报文段的超时重传计时器超时再重传</li><li>快重传可以使整个网络的吞吐量提高20%</li></ul></li></ul></li></ul><p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/df7bfd977864471e80628347258ea661~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328173238995 - 副本.png"></p><ul><li><p>快恢复</p><ul><li>发送端收到了<code>三个重复确认</code>，就知道现在只是丢失了个别报文段，启动快恢复算法。</li><li><code>发送方将慢开始门限ssthresh值和拥塞窗口cwnd值调整为当前窗口的一半；开始执行拥塞避免算法</code></li><li>也有的快恢复实现十八恢复开始时二点拥塞窗口值cwnd增大一些，也就是ssthresh+3<ul><li>既然发送方收到3个重复确认，表面有3个数据报文段已经离开了网络</li><li>这三个报文段不再消耗网络资源而是停留在接收缓存中</li><li>所以现在的网络不是堆积了报文段，而是减少了，可以把窗口扩大些</li></ul></li></ul></li></ul><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/afc24a06d1e246ad832c02af36bd22ae~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328174918520.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="TCP" scheme="https://shen-yu.gitee.io/categories/TCP/"/>
+    
+    
+    <category term="计算机网络" scheme="https://shen-yu.gitee.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java断点续传多线程下载器（2）-HttpURLConnection和IO流传输</title>
+    <link href="https://shen-yu.gitee.io/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%882%EF%BC%89-HttpURLConnection%E5%92%8CIO%E6%B5%81%E4%BC%A0%E8%BE%93/"/>
+    <id>https://shen-yu.gitee.io/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%882%EF%BC%89-HttpURLConnection%E5%92%8CIO%E6%B5%81%E4%BC%A0%E8%BE%93/</id>
+    <published>2021-06-15T13:06:27.000Z</published>
+    <updated>2021-06-15T13:07:11.377Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><ul><li>上回，咱把整个下载器的流程和原理给梳理一遍，很显然这里有几个重点知识点：如何和网络地址取得连接，也就是<strong>连接servlet</strong>以及<strong>IO流传输</strong>和<strong>线程池</strong>（想用线程池，多线程的三种创建只用过前两种）。</li></ul><hr><h4 id="从HttpURLConnection开始"><a href="#从HttpURLConnection开始" class="headerlink" title="从HttpURLConnection开始"></a>从<strong>HttpURLConnection</strong>开始</h4><p>HttpURLConnection是Java提供的一个发起HTTP请求的基础类库，可以做到发起POST GET请求，我们这次只是需要获取和设置请求头来得到一些必要的文件信息等一些别的操作，相对来说比较简单。</p><p>HttpURLConnection的封装比较简略，很多事情需要我们自己干，不过我们本次涉及到的操作不多，没啥所谓，基础的东西用就是了。</p><h4 id="统计下涉及到的API"><a href="#统计下涉及到的API" class="headerlink" title="统计下涉及到的API"></a>统计下涉及到的API</h4><ul><li><p>设置请求头：setRequestProperty</p></li><li><p>获取请求头：getHeaderField</p></li><li><p>连接超时： setConnectTimeout</p></li><li><p>获取状态码：getResponseCode</p></li></ul><h4 id="用法和基本流程"><a href="#用法和基本流程" class="headerlink" title="用法和基本流程"></a>用法和基本流程</h4><ol><li><p>第一步当然是建立连接</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URL url1 = <span class="keyword">new</span> URL(url);<span class="comment">//拿到一个URL对象</span></span><br><span class="line">HttpURLConnection httpURLConnection = (HttpURLConnection) url1.openConnection();</span><br><span class="line"><span class="comment">//利用HttpURLConnection对象从网络中获取网页数据</span></span><br></pre></td></tr></table></figure></li><li><p>为了避免连接超时，设置一下连接超时的限制（HttpURLConnection是基于HTTP协议的，其底层通过socket通信实现。如果不设置超时（timeout），在网络异常的情况下，可能会导致程序僵死而不继续往下执行。）</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">httpURLConnection.setConnectTimeout(<span class="number">6</span>*<span class="number">1000</span>);<span class="comment">//为了避免连接超时</span></span><br></pre></td></tr></table></figure></li><li><p>正如我们之前所说的，我们可以对<code>Content-Range</code>字段进行设置，Content-Range：A-B 就是从第A个bytes开始下载到第B个bytes</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (...)&#123;</span><br><span class="line">        httpURLConnection.setRequestProperty(<span class="string">&quot;RANGE&quot;</span>,<span class="string">&quot;bytes=&quot;</span> + start + <span class="string">&quot;-&quot;</span> + end);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    httpURLConnection.setRequestProperty(<span class="string">&quot;RANGE&quot;</span>,<span class="string">&quot;bytes&quot;</span> + start + <span class="string">&quot;-&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li><li><p>当然还有获取大小</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> length = httpURLConnection.getContentLength();</span><br></pre></td></tr></table></figure></li><li><p>获取请求头来得到 Etag </p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, List&lt;String&gt;&gt; headerFields = httpUrlConnection.getHeaderFields();</span><br><span class="line">List&lt;String&gt; eTagList = headerFields.get(<span class="string">&quot;ETag&quot;</span>);</span><br></pre></td></tr></table></figure></li><li><p>关闭连接</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">httpUrlConnection.disconnect();</span><br></pre></td></tr></table></figure></li></ol><h4 id="IO流传输"><a href="#IO流传输" class="headerlink" title="IO流传输"></a>IO流传输</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>(InputStream inputStream = httpURLConnection.getInputStream();</span><br><span class="line">    BufferedInputStream bufferedInputStream = <span class="keyword">new</span> BufferedInputStream(inputStream);</span><br><span class="line">    RandomAccessFile randomAccessFile = <span class="keyword">new</span> RandomAccessFile(httpFileName,<span class="string">&quot;rw&quot;</span>))&#123;</span><br><span class="line">    randomAccessFile.seek(localFileContentLength);</span><br><span class="line">    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[BYTE_SIZE];</span><br><span class="line">    <span class="keyword">int</span> len = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> ((len = bufferedInputStream.read(bytes)) != -<span class="number">1</span>)&#123;</span><br><span class="line">        randomAccessFile.write(bytes,<span class="number">0</span>,len);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span>(...)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>这里就是通过IO流来写入文件的过程</li><li>`InputStream inputStream = httpURLConnection.getInputStream();<pre><code>BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);RandomAccessFile randomAccessFile = new RandomAccessFile(httpFileName,&quot;rw&quot;)`</code></pre></li></ul><p>这三行再try(…)，括号中的代码一般放的是对资源的申请，如果{}中的代码出项了异常，（）中的资源就会被关闭，这在inputstream和outputstream的使用中会很方便。网上搜索一波后：这是所谓的try-with-resources，自动资源管理，应该意思是括号里的资源，是语句末尾一定确保要关闭的。</p><h4 id="Future模式"><a href="#Future模式" class="headerlink" title="Future模式"></a>Future模式</h4><p>这里是在学习了敖丙大佬的文章后，尝试写出来的。所以这个Future不就是个画大饼的渣男吗？？？</p><p>废话不多说，直接上敖丙大佬链接<code>https://juejin.cn/post/6950065347227549703</code>！</p><h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p>这个是因为在测试的时候那个getContentLength()返回的一直是-1，懵掉了。</p><p>然后再短暂的百度后，发现似乎有个参数问题没有注意：</p><pre><code>`httpConnection.setRequestProperty(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36&quot;);`</code></pre><p>这个User-Agent如果不设置，不就是相当于告诉别人我要爬你了吗？所以我们可以对这个参数做一下设置</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="断点续传" scheme="https://shen-yu.gitee.io/categories/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/"/>
+    
+    
+    <category term="项目" scheme="https://shen-yu.gitee.io/tags/%E9%A1%B9%E7%9B%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java断点续传多线程下载器（1）-原理和构想</title>
+    <link href="https://shen-yu.gitee.io/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%881%EF%BC%89-%E5%8E%9F%E7%90%86%E5%92%8C%E6%9E%84%E6%83%B3/"/>
+    <id>https://shen-yu.gitee.io/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%881%EF%BC%89-%E5%8E%9F%E7%90%86%E5%92%8C%E6%9E%84%E6%83%B3/</id>
+    <published>2021-06-15T13:03:21.000Z</published>
+    <updated>2021-06-15T13:05:44.928Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><ul><li> 刚刚学习了Java多线程基础和计算机网络等等，没个实践不得行，尝试着写一个Java多线程下载器来玩玩</li></ul><hr><h4 id="前期的原理学习和项目构想"><a href="#前期的原理学习和项目构想" class="headerlink" title="前期的原理学习和项目构想"></a>前期的原理学习和项目构想</h4><h5 id="基础概念的疏导"><a href="#基础概念的疏导" class="headerlink" title="基础概念的疏导"></a>基础概念的疏导</h5><h6 id="第一眼看到断点续传多线程下载器时候发出的疑问？"><a href="#第一眼看到断点续传多线程下载器时候发出的疑问？" class="headerlink" title="第一眼看到断点续传多线程下载器时候发出的疑问？"></a>第一眼看到<code>断点续传多线程下载器</code>时候发出的疑问？</h6><p>这玩意第一眼看上去会出现很多问题也很正常嘛，绝对不只是因为我菜啊。我们平时最常用的下载器应该就是迅雷了，或者就是在浏览器上直接下载。如果让我自己来搞一个下载器的话，我的第一反应可能是个传输工具的demo吧。于是，出现了以下的问题：</p><ul><li><p>断点续传是啥？</p></li><li><p>多线程下载器是什么意思？</p></li><li><p>多线程下载和单线程下载比有啥更屌的吗？</p></li></ul><ol><li><p><strong>断点续传是啥</strong></p><ul><li><p><code>FTP（文件传输协议的简称）（File Transfer Protocol、 FTP）客户端软件断点续传指的是在下载或[上传](https://baike.baidu.com/item/上传/749624)时，将下载或上传任务（一个文件或一个[压缩包](https://baike.baidu.com/item/压缩包/5373066)）人为的划分为几个部分，每一个部分采用一个[线程](https://baike.baidu.com/item/线程/103101)进行上传或下载，如果碰到[网络故障](https://baike.baidu.com/item/网络故障/1391028)，可以从已经上传或下载的部分开始继续上传下载未完成的部分，而没有必要从头开始上传[下载](https://baike.baidu.com/item/下载/2270927)。用户可以节省时间，提高速度。</code></p><pre><code>                                                                                                                                                —    一段百度百科送给大家</code></pre></li><li><p>说白了，就是我让你停你就停，下次让你继续，你就得哪里跌倒哪里爬起来。这个应该是一个下载器最基本的素质</p></li></ul></li><li><p><strong>多线程下载器是什么意思？</strong></p><ul><li>从我们直观的角度来看，我们在下载的时候会有一个进度条，我们可能会以为只有一个通道在下载文件，但其实可能不是，<code>线程和进程的概念</code>就不在这里做赘述了。在下载的时候，下载器会把一个文件分割成很多份，每一份交由一个线程来下载，这样子是不是感觉到会变快很多呢？</li><li>所以，假如我开了N个线程，是不是就比单线程要快N倍呢？那岂不是线程越多越好？事实上，线程并不是越多越好，N个线程也不是比单个线程要快N倍。因为，从根本上来看，线程同步也不过是宏观上看，从CPU的角度来看，无非是多个线程在CPU规划好的时间片内轮流占有CPU资源。并不是真正意义上的<strong>齐头并进</strong>。那么，就牵扯出了下一个问题：</li></ul></li><li><p><strong>多线程下载和单线程下载比有啥更屌的吗？</strong></p><ul><li><p>多线程屌还是屌的，至少学长是这样说的，那我不管，我只管研究它屌在哪里。既然我们说，多线程快，并不是快在它真的可以齐头并进，那么它快在哪里呢？ 这里就要牵扯出一个知识点了=&gt;<strong>拥塞避免算法</strong></p><h5 id="拥塞避免算法："><a href="#拥塞避免算法：" class="headerlink" title="拥塞避免算法："></a>拥塞避免算法：</h5><pre><code>哈？关于这个知识点，我做了笔记的，**湖科大教书匠永远的神。**`拥塞避免算法的链接：`https://juejin.cn/post/6945802089050144805</code></pre></li><li><p>所以，单线程如果被拥塞避免算法卡了一刀，整个下载速度就真的被砍了一刀。鸡蛋不要放在同一个篮子里，如果我们开了多线程，只要不是所有进程都被砍了一刀，就一定比单线程被砍一刀要快。</p></li><li><p>当然，如果在整个下载过程根本没有发送IO阻塞，一点点都没有，那我觉得还是单线程更快。毕竟多线程的切换上下文会影响效率。</p></li></ul></li></ol><h6 id="断点续传的实现原理"><a href="#断点续传的实现原理" class="headerlink" title="断点续传的实现原理"></a>断点续传的实现原理</h6><p>那行，我们了解了断点续传似乎是真的屌，就应该来思考如何来实现多线程断点续传了。因此，现在也遇到了新的疑问，：</p><ul><li><p>我怎么知道这个下载链接它给不给我断点续传？</p></li><li><p>我怎么把一个文件待传部分给切成多份给多线程？</p></li><li><p>如果我传了一半，过段时间源文件它更新了，怎么搞？</p></li><li><p>我知道可以断点续传了，也知道了文件有没有更新了，然后用多进程下载下来了，然后呢？</p></li></ul><hr><ol><li><p><strong>我怎么知道这个下载链接它给不给我断点续传？</strong></p><ul><li>首先，咱要了解一下HTTP协议，HTTP协议从1.1开始支持获取文件的部分内容，这为并行下载以及断点续传提供了技术支持。</li><li>在这个HTTP请求中有请求头<strong>Request header</strong> 和 响应头<strong>Response header</strong> 。如果响应头中有<code>Accept-Ranges: bytes //是否允许指定传输范围，bytes：范围请求的单位是 bytes（字节），none：不支持任何范围请求单位</code>这个字段，那好，你可以断点续传。<code>哪里趴下，哪里站起来，不然的话，从头来过吧，和打游戏档被人删了一样。</code></li></ul></li><li><p><strong>我怎么把一个文件待传部分给切成多份给多线程？</strong></p><ul><li>我们可以对<code>Content-Range</code>字段进行设置，Content-Range：A-B 就是从第A个bytes开始下载到第B个bytes</li></ul></li><li><p><strong>如果我传了一半，过段时间源文件它更新了，怎么搞？</strong></p><ul><li>对于这个问题，我们可以有两个关键字：<code>ETag</code>和<code>Last-Modified</code>.</li><li><code>Last-Modified</code>可以记录该文件最后更新的时间戳，以此来判断文件是否有做过修改，有的文件可能会周期性的修改，有的文件可能修改得贼拉快，有的服务器可能时间记录的不准，所以该字段似乎并不能够完全证明文件内容被修改过。</li><li><code>ETag</code>是一个和文件相关的标记，可以是一个版本标记，可以理解成文件的指纹，但是 HTTP/1.1 标准并没有规定 Etag 的内容是什么或者说要怎么实现，唯一规定的是 Etag 需要放在 “ ” 内。</li></ul></li><li><p><strong>我知道可以断点续传了，也知道了文件有没有更新了，然后用多进程下载下来了，然后呢？</strong></p><ul><li>然后就可以使用 <code>RandomAccessFile</code> 把下载的临时文件合并成一个文件了呀，然后这个项目的第一个版本就出现了呀</li></ul></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla</summary>
+      
+    
+    
+    
+    <category term="断点续传" scheme="https://shen-yu.gitee.io/categories/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/"/>
+    
+    
+    <category term="项目" scheme="https://shen-yu.gitee.io/tags/%E9%A1%B9%E7%9B%AE/"/>
+    
+  </entry>
+  
+  <entry>
     <title>关于我</title>
     <link href="https://shen-yu.gitee.io/2021/about/"/>
     <id>https://shen-yu.gitee.io/2021/about/</id>
     <published>2021-06-13T13:45:49.000Z</published>
-    <updated>2021-06-13T15:06:56.395Z</updated>
+    <updated>2021-06-13T16:23:44.964Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>我是Xavi，如果累了，来杯马黛茶吧！</p><!-- ![Xavi.jpg](https://xavizhang-jy.github.io/images/Xavi.jpg) -->]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>我是Xavi，如果累了，来杯马黛茶吧！</p>]]></content>
     
     
       
@@ -34,7 +154,7 @@
     
     
     
-    <category term="think" scheme="https://shen-yu.gitee.io/tags/think/"/>
+    <category term="Xavi" scheme="https://shen-yu.gitee.io/tags/Xavi/"/>
     
   </entry>
   
