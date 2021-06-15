@@ -1,67 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>MySQL索引类型都有啥？</title>
-    <url>/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="数据库的索引类型"><a href="#数据库的索引类型" class="headerlink" title="数据库的索引类型"></a>数据库的索引类型</h1><h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><ul>
-<li>普通索引允许索引内容有重复数据，任务是为了加快对数据的访问速度。没什么特别的要求，只要它是查询的条件，就可以给它加上普通索引</li>
-</ul>
-<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><ul>
-<li><p>唯一索引相对于普通索引就有了一个条件，那就是索引列的值不可以重复，但是可以为空。很显然，拿个人信息库来举例的话，身份证号很合适，或者创建时给予的序号或工号、学号这种不会重复的值。想年龄、性别就不可以，名字也会有重名的（张伟震怒）。</p>
-</li>
-<li><p>所以唯一索引在插入时就需要先检查该索引数据是否在数据库中已经有了，在进行添加。</p>
-<span id="more"></span></li>
-</ul>
-<h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><ul>
-<li>主键索引和唯一索引很像，唯一的区别就是主键的关键字是PRIMARY，不同于唯一的UNIQUE。</li>
-</ul>
-<h3 id="组合索引"><a href="#组合索引" class="headerlink" title="组合索引"></a>组合索引</h3><ul>
-<li><p>组合索引指多个字段上创建的索引，只有在查询条件中使用了创建索引时的第一个字段，索引才会被使用。使用组合索引时遵循最左前缀集合。</p>
-</li>
-<li><p>索引项是按照索引定义里面出现的字段顺序排序的，遵循最左前缀原则。</p>
-<ul>
-<li><p>最左匹配原则</p>
-<ul>
-<li>就是如果你的SQL语句用到了索引最左边的字段或者字符，就可以利用这个联合索引去匹配。</li>
-<li>但是如果遇到范围查询(&gt;、&lt;、between、like)，就会停止，但是其左侧的字段依然可以走索引</li>
-<li>原理：<ul>
-<li>由于MySQL底层是一颗B+树，联合索引也是一颗B+树</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>只要满足最左前缀，就可以利用索引来加速检索。这个最左前缀可以是联合索引的最左 N 个字段，也可以是字符串索引的最左 M 个字符。</p>
-<ul>
-<li>like aa%后模糊查询索引有效，like %aa模糊查询索引无效</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>InnoDB会把主键字段放到索引定义字段后面， 当然同时也会去重。 所以，当主键是(a,b)的时候， 定义为c的索引，实际上是（c,a,b); 定义为(c,a)的索引，实际上是(c,a,b) 你看着加是相同的 ps 定义为(c,b）的索引，实际上是（c,b,a)。</strong>这时候再根据具体情况来对索引进行优化。</p>
-</li>
-</ul>
-<h3 id="唯一索引和普通索引的区别"><a href="#唯一索引和普通索引的区别" class="headerlink" title="唯一索引和普通索引的区别"></a>唯一索引和普通索引的区别</h3><h4 id="从数据查询来看"><a href="#从数据查询来看" class="headerlink" title="从数据查询来看"></a>从数据查询来看</h4><p>首先，MySQL底层是B+实现，利用二分法来定位到数据位置。</p>
-<ul>
-<li>如果是范围查找，普通索引并没有唯一索引的唯一性，这样的话，假如现在要查询 id = 3 的索引，由于普通索引不一定唯一，所以需要在查询到id = 3的索引后再往后查询一个，判断其是否不为3，再结束；而唯一索引不需要，找到就停。</li>
-</ul>
-<p>很显然，普通索引比唯一索引多一次查询，这一次查询如果是内存中查询基本没差，如果是磁盘IO可能还有点区别，然而引擎的读写是按照页来的，一页都读进内存，再来操作。所以，大概率是多一次内存的查询，没啥差别。</p>
-<p><strong>结论：从查询来看，唯一索引和普通索引并没有啥区别</strong></p>
-<h4 id="从数据插入来看"><a href="#从数据插入来看" class="headerlink" title="从数据插入来看"></a>从数据插入来看</h4><p>这路需要介绍一个change buffer的概念：这个change buffer也是普通索引比唯一索引更快的原因。</p>
-<p><strong>先说结论，普通索引更快，因为普通索引可以使用change buffer来提升磁盘IO读写的效率，而唯一索引不可以使用change buffer。因为唯一索引需要保证唯一性，本身就需要把数据读到内存中来判断，而且别忘了，是一页一页地读，再搞个change buffer纯属脱裤子放屁。</strong></p>
-<h5 id="change-buffer"><a href="#change-buffer" class="headerlink" title="change buffer"></a>change buffer</h5><p>我们知道，引擎会先把数据页读到内存中，再对数据进行查询和修改。如果我们要修改更新数据，就需要先找到修改的位置，这基本上就是查询过程。</p>
-<p>所以，为了提高效率，如果是修改的数据此刻不在内存中，就会先把修改操作保存在change buffer中，然后等到下一次查询操作的时候，如果查到了修改的位置，就先执行操作，毕竟没有查询的话，修改就没有显式的作用。当然了，如果你的每一次修改都可能伴随着查询，那就反而会拖慢效率。（让人联想到了我家猪猪🐖的ddl精神，有报告不写，诶，就是玩！等到截止时间前一晚再做，提高效率！）</p>
-<p>将 change buffer 中的操作应用到原数据页，得到最新结果的过程称为 merge。除了访问这个数据页会触发 merge 外，系统有后台线程会定期 merge。在数据库正常关闭（shutdown）的过程中，也会执行 merge 操作。</p>
-<h5 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h5><p>change buffer的merge操作，先把change buffer的操作更新到内存的数据页中，此操作写到redo log中，mysql未宕机，redo log写满后需要移动check point点时，通过判断内存中数据和磁盘是否一致即是否是脏页来刷新到磁盘中，当mysql宕机后没有内存即没有脏页,通过redo log来恢复。</p>
-<h5 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h5><p>redo log是物理日志，记录的是数据页的修改，但是如果数据页不在内存中怎么办呢？都没有去修改数据页，redo log中记什么？所以这时候change buffer登场了，如果修改的不是唯一索引，而是普通索引，不用再去磁盘随机IO了，直接将这个修改记录在change buffer中。也可以说，数据页在内存，那就修改数据页，写redo log，如果数据页不在内存，修改的也不是唯一索引，而是普通索引，那就写change buffer。并把这个change buffer写入到redo log，防止更新丢失。</p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java断点续传多线程下载器（2）-HttpURLConnection和IO流传输</title>
     <url>/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%882%EF%BC%89-HttpURLConnection%E5%92%8CIO%E6%B5%81%E4%BC%A0%E8%BE%93/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><ul>
@@ -213,6 +152,138 @@ RandomAccessFile randomAccessFile = new RandomAccessFile(httpFileName,&quot;rw&q
       </tags>
   </entry>
   <entry>
+    <title>TCP如何保证可靠传输</title>
+    <url>/2021/TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h3 id="TCP如何保证可靠传输？"><a href="#TCP如何保证可靠传输？" class="headerlink" title="TCP如何保证可靠传输？"></a><code>TCP</code>如何保证可靠传输？</h3><ul>
+<li>TCP基于<code>以字节为单位的滑动窗口</code>来实现可靠传输</li>
+<li>如何描述发送窗口的状态？（使用三个指针来分别指向相应的字节序号）<ul>
+<li>小于P1的是已发送并已收到确认的部分</li>
+<li>大于等于P3的是不允许发送的</li>
+<li>P3-P1=发送窗口的尺寸</li>
+<li>P2-P1=已发送但尚未收到确认的字节数</li>
+<li>P3-P2=允许发生但尚未发送的字节数（又称为可用窗口或有效窗口）</li>
+</ul>
+</li>
+<li>虽然发送方的发送窗口时根据接收方的接受窗口设置的，但在同一时刻，<code>发送方的发送窗口并不总是和接收方的接收窗口一样大</code><ul>
+<li>网络传送窗口值需要经历一定的时间之后，而且这个时间还是不确定的</li>
+<li>发送方也有可能根据网络当时的拥塞情况适当减小自己的发送窗口尺寸<ul>
+<li>如果接收方把不按序到达的数据一律丢弃，那么接受窗口的管理将会比较简单，但这样对网络资源的利用不利，因为发送方会重复传送较多的数据。</li>
+<li>TCP通常对不按序到达的数据是先临时存放在接受窗口中，等到字节流中所缺少的字节到了后，再给到<code>上层的应用进程</code></li>
+</ul>
+</li>
+<li>TCP要求接收方必须有<code>累计确认和捎带确认机制</code>，减少传输开销。接收方可以在合适的时候发送确认，也可以在自己有数据要发生时，顺便一起把确认信息带上<ul>
+<li><code>接收方不应过分推迟发送确认</code>，否则会导致发送方不必要的超时重传，这反而浪费了网络资源。TCP标准规定，确认推迟的时间不应超过0.5s。若收到一连串具有最大长度的报文段，则必须每隔一个报文段发送一个确认[RFC 1122]</li>
+<li>捎带确认很少发生，大多数应用程序很少同时两个方向上发送数据</li>
+</ul>
+</li>
+<li>TCP的通信时全双工通信。</li>
+</ul>
+</li>
+<li>对于不按序到达的数据应如何处理，TCP并无明确规定</li>
+<li><strong>总结</strong>：<ol>
+<li><strong>校验和</strong>：发送的数据包的二进制相加然后取反，<strong>目的是检测数据在传输过程中的任何变化</strong>。如果收到段的检验和有差错，TCP将丢弃这个报文段和不确认收到此报文段。 </li>
+<li><strong>编号</strong>：TCP给发送的<strong>每一个包进行编号</strong>，接收方<strong>对数据包进行排序</strong>，把有序数据传送给应用层。 </li>
+<li><strong>超时重传</strong>：当TCP<strong>发出一个段后，它启动一个定时器</strong>，等待目的端确认收到这个报文段。如果不能及时收到一个确认，将重发这个报文段。 </li>
+<li><strong>滑动窗口</strong></li>
+<li><strong>拥塞控制</strong><h3 id="TCP的流量控制"><a href="#TCP的流量控制" class="headerlink" title="TCP的流量控制"></a><code>TCP</code>的流量控制</h3></li>
+</ol>
+</li>
+<li>流量控制说白了就是让发送方不要传的那么快，太快了来不及接收</li>
+<li>利用<code>滑动窗口</code>可以很方便地在TCP连接上实现对发送方的流量控制</li>
+</ul>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d4a4e28a42e54eee9fc028e5a3c8196f~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328162924958 - 副本.png"></p>
+<ul>
+<li><code>seq=1 DATA</code>：seq取值1，表示TCP报文段数据载荷的第一个字节的序号是1</li>
+<li><code>DATA</code>表示该报文段为TCP数据报文段</li>
+</ul>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/35f1f2a9f617428d8f37edc8dfac3c16~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328163004482 - 副本.png"></p>
+<ul>
+<li><code>ACK</code>：TCP报文段首部中的标志位，取值1表示这是TCP确认报文段</li>
+<li><code>ack</code>：TCP报文段首部中的确认号字段，取值201表示序号201以前都正确接受，等待接受201后的数据</li>
+<li><code>rwnd</code>：TCP报文段首部中的窗口字段，取值300表示，接受窗口改为300</li>
+<li>只要TCP连接的一方，收到对方的<code>零窗口通知</code>，就启动一个<code>持续计时器</code>，若超时，就发送一个<code>零窗口探测报文（只携带1字节数据）</code>，接收方在收到<code>探测报文段</code>时，给出自己的<code>接收窗口值</code>。若依然是0，就重启计时器。</li>
+<li>事实上，TCP规定，即使接收窗口为0，也必须接收<code>零窗口探测报文段、确认报文段、带有紧急数据的报文段</code>。</li>
+<li><code>零窗口探测报文段</code>也有重传计时器，超时就重传。 </li>
+</ul>
+]]></content>
+      <categories>
+        <category>TCP</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于我</title>
+    <url>/2021/about/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>我是Xavi，如果累了，来杯马黛茶吧！</p>
+]]></content>
+      <tags>
+        <tag>Xavi</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL索引类型都有啥？</title>
+    <url>/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="数据库的索引类型"><a href="#数据库的索引类型" class="headerlink" title="数据库的索引类型"></a>数据库的索引类型</h1><h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><ul>
+<li>普通索引允许索引内容有重复数据，任务是为了加快对数据的访问速度。没什么特别的要求，只要它是查询的条件，就可以给它加上普通索引</li>
+</ul>
+<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><ul>
+<li><p>唯一索引相对于普通索引就有了一个条件，那就是索引列的值不可以重复，但是可以为空。很显然，拿个人信息库来举例的话，身份证号很合适，或者创建时给予的序号或工号、学号这种不会重复的值。想年龄、性别就不可以，名字也会有重名的（张伟震怒）。</p>
+</li>
+<li><p>所以唯一索引在插入时就需要先检查该索引数据是否在数据库中已经有了，在进行添加。</p>
+<span id="more"></span></li>
+</ul>
+<h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><ul>
+<li>主键索引和唯一索引很像，唯一的区别就是主键的关键字是PRIMARY，不同于唯一的UNIQUE。</li>
+</ul>
+<h3 id="组合索引"><a href="#组合索引" class="headerlink" title="组合索引"></a>组合索引</h3><ul>
+<li><p>组合索引指多个字段上创建的索引，只有在查询条件中使用了创建索引时的第一个字段，索引才会被使用。使用组合索引时遵循最左前缀集合。</p>
+</li>
+<li><p>索引项是按照索引定义里面出现的字段顺序排序的，遵循最左前缀原则。</p>
+<ul>
+<li><p>最左匹配原则</p>
+<ul>
+<li>就是如果你的SQL语句用到了索引最左边的字段或者字符，就可以利用这个联合索引去匹配。</li>
+<li>但是如果遇到范围查询(&gt;、&lt;、between、like)，就会停止，但是其左侧的字段依然可以走索引</li>
+<li>原理：<ul>
+<li>由于MySQL底层是一颗B+树，联合索引也是一颗B+树</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>只要满足最左前缀，就可以利用索引来加速检索。这个最左前缀可以是联合索引的最左 N 个字段，也可以是字符串索引的最左 M 个字符。</p>
+<ul>
+<li>like aa%后模糊查询索引有效，like %aa模糊查询索引无效</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>InnoDB会把主键字段放到索引定义字段后面， 当然同时也会去重。 所以，当主键是(a,b)的时候， 定义为c的索引，实际上是（c,a,b); 定义为(c,a)的索引，实际上是(c,a,b) 你看着加是相同的 ps 定义为(c,b）的索引，实际上是（c,b,a)。</strong>这时候再根据具体情况来对索引进行优化。</p>
+</li>
+</ul>
+<h3 id="唯一索引和普通索引的区别"><a href="#唯一索引和普通索引的区别" class="headerlink" title="唯一索引和普通索引的区别"></a>唯一索引和普通索引的区别</h3><h4 id="从数据查询来看"><a href="#从数据查询来看" class="headerlink" title="从数据查询来看"></a>从数据查询来看</h4><p>首先，MySQL底层是B+实现，利用二分法来定位到数据位置。</p>
+<ul>
+<li>如果是范围查找，普通索引并没有唯一索引的唯一性，这样的话，假如现在要查询 id = 3 的索引，由于普通索引不一定唯一，所以需要在查询到id = 3的索引后再往后查询一个，判断其是否不为3，再结束；而唯一索引不需要，找到就停。</li>
+</ul>
+<p>很显然，普通索引比唯一索引多一次查询，这一次查询如果是内存中查询基本没差，如果是磁盘IO可能还有点区别，然而引擎的读写是按照页来的，一页都读进内存，再来操作。所以，大概率是多一次内存的查询，没啥差别。</p>
+<p><strong>结论：从查询来看，唯一索引和普通索引并没有啥区别</strong></p>
+<h4 id="从数据插入来看"><a href="#从数据插入来看" class="headerlink" title="从数据插入来看"></a>从数据插入来看</h4><p>这路需要介绍一个change buffer的概念：这个change buffer也是普通索引比唯一索引更快的原因。</p>
+<p><strong>先说结论，普通索引更快，因为普通索引可以使用change buffer来提升磁盘IO读写的效率，而唯一索引不可以使用change buffer。因为唯一索引需要保证唯一性，本身就需要把数据读到内存中来判断，而且别忘了，是一页一页地读，再搞个change buffer纯属脱裤子放屁。</strong></p>
+<h5 id="change-buffer"><a href="#change-buffer" class="headerlink" title="change buffer"></a>change buffer</h5><p>我们知道，引擎会先把数据页读到内存中，再对数据进行查询和修改。如果我们要修改更新数据，就需要先找到修改的位置，这基本上就是查询过程。</p>
+<p>所以，为了提高效率，如果是修改的数据此刻不在内存中，就会先把修改操作保存在change buffer中，然后等到下一次查询操作的时候，如果查到了修改的位置，就先执行操作，毕竟没有查询的话，修改就没有显式的作用。当然了，如果你的每一次修改都可能伴随着查询，那就反而会拖慢效率。（让人联想到了我家猪猪🐖的ddl精神，有报告不写，诶，就是玩！等到截止时间前一晚再做，提高效率！）</p>
+<p>将 change buffer 中的操作应用到原数据页，得到最新结果的过程称为 merge。除了访问这个数据页会触发 merge 外，系统有后台线程会定期 merge。在数据库正常关闭（shutdown）的过程中，也会执行 merge 操作。</p>
+<h5 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h5><p>change buffer的merge操作，先把change buffer的操作更新到内存的数据页中，此操作写到redo log中，mysql未宕机，redo log写满后需要移动check point点时，通过判断内存中数据和磁盘是否一致即是否是脏页来刷新到磁盘中，当mysql宕机后没有内存即没有脏页,通过redo log来恢复。</p>
+<h5 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h5><p>redo log是物理日志，记录的是数据页的修改，但是如果数据页不在内存中怎么办呢？都没有去修改数据页，redo log中记什么？所以这时候change buffer登场了，如果修改的不是唯一索引，而是普通索引，不用再去磁盘随机IO了，直接将这个修改记录在change buffer中。也可以说，数据页在内存，那就修改数据页，写redo log，如果数据页不在内存，修改的也不是唯一索引，而是普通索引，那就写change buffer。并把这个change buffer写入到redo log，防止更新丢失。</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>TCP拥塞控制的过程（四个状态）</title>
     <url>/2021/TCP%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%88%E5%9B%9B%E4%B8%AA%E7%8A%B6%E6%80%81%EF%BC%89/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h5 id="TCP拥塞控制的过程。（四个状态都要解释清楚）"><a href="#TCP拥塞控制的过程。（四个状态都要解释清楚）" class="headerlink" title="TCP拥塞控制的过程。（四个状态都要解释清楚）"></a><code>TCP</code>拥塞控制的过程。（四个状态都要解释清楚）</h5><ul>
@@ -311,15 +382,6 @@ RandomAccessFile randomAccessFile = new RandomAccessFile(httpFileName,&quot;rw&q
       </tags>
   </entry>
   <entry>
-    <title>关于我</title>
-    <url>/2021/about/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p>我是Xavi，如果累了，来杯马黛茶吧！</p>
-]]></content>
-      <tags>
-        <tag>Xavi</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>三次握手和四次挥手</title>
     <url>/2021/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h3 id="TCP三次握手的过程（含状态转换，报文中的参数）"><a href="#TCP三次握手的过程（含状态转换，报文中的参数）" class="headerlink" title="TCP三次握手的过程（含状态转换，报文中的参数）"></a><code>TCP</code>三次握手的过程（含状态转换，报文中的参数）</h3><ul>
@@ -396,68 +458,6 @@ RandomAccessFile randomAccessFile = new RandomAccessFile(httpFileName,&quot;rw&q
 <h3 id="为什么TIME-WAIT状态需要经历2MSL才能转换到CLOSE状态？"><a href="#为什么TIME-WAIT状态需要经历2MSL才能转换到CLOSE状态？" class="headerlink" title="为什么TIME_WAIT状态需要经历2MSL才能转换到CLOSE状态？"></a>为什么<code>TIME_WAIT</code>状态需要经历<code>2MSL</code>才能转换到<code>CLOSE</code>状态？</h3><ul>
 <li>如果第四次挥手丢失了，将导致第三次握手，也就是服务器的连接释放报文段的超时重传。但是如果这时候客户端已经关闭了，就接受不到了，服务器就会不断地重传，一直处于最后确认状态。</li>
 <li>另外，TCP客户进程发送完最后一个TCP确认报文段后，再经过2MSL时间，就可以把本次连接所产生的所以报文段都从网络中消失，防止下一个新的TCP连接中出现旧的报文段（这里的意思是有旧的报文段在网络中延误了吗）。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>TCP</category>
-      </categories>
-      <tags>
-        <tag>计算机网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TCP如何保证可靠传输</title>
-    <url>/2021/TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h3 id="TCP如何保证可靠传输？"><a href="#TCP如何保证可靠传输？" class="headerlink" title="TCP如何保证可靠传输？"></a><code>TCP</code>如何保证可靠传输？</h3><ul>
-<li>TCP基于<code>以字节为单位的滑动窗口</code>来实现可靠传输</li>
-<li>如何描述发送窗口的状态？（使用三个指针来分别指向相应的字节序号）<ul>
-<li>小于P1的是已发送并已收到确认的部分</li>
-<li>大于等于P3的是不允许发送的</li>
-<li>P3-P1=发送窗口的尺寸</li>
-<li>P2-P1=已发送但尚未收到确认的字节数</li>
-<li>P3-P2=允许发生但尚未发送的字节数（又称为可用窗口或有效窗口）</li>
-</ul>
-</li>
-<li>虽然发送方的发送窗口时根据接收方的接受窗口设置的，但在同一时刻，<code>发送方的发送窗口并不总是和接收方的接收窗口一样大</code><ul>
-<li>网络传送窗口值需要经历一定的时间之后，而且这个时间还是不确定的</li>
-<li>发送方也有可能根据网络当时的拥塞情况适当减小自己的发送窗口尺寸<ul>
-<li>如果接收方把不按序到达的数据一律丢弃，那么接受窗口的管理将会比较简单，但这样对网络资源的利用不利，因为发送方会重复传送较多的数据。</li>
-<li>TCP通常对不按序到达的数据是先临时存放在接受窗口中，等到字节流中所缺少的字节到了后，再给到<code>上层的应用进程</code></li>
-</ul>
-</li>
-<li>TCP要求接收方必须有<code>累计确认和捎带确认机制</code>，减少传输开销。接收方可以在合适的时候发送确认，也可以在自己有数据要发生时，顺便一起把确认信息带上<ul>
-<li><code>接收方不应过分推迟发送确认</code>，否则会导致发送方不必要的超时重传，这反而浪费了网络资源。TCP标准规定，确认推迟的时间不应超过0.5s。若收到一连串具有最大长度的报文段，则必须每隔一个报文段发送一个确认[RFC 1122]</li>
-<li>捎带确认很少发生，大多数应用程序很少同时两个方向上发送数据</li>
-</ul>
-</li>
-<li>TCP的通信时全双工通信。</li>
-</ul>
-</li>
-<li>对于不按序到达的数据应如何处理，TCP并无明确规定</li>
-<li><strong>总结</strong>：<ol>
-<li><strong>校验和</strong>：发送的数据包的二进制相加然后取反，<strong>目的是检测数据在传输过程中的任何变化</strong>。如果收到段的检验和有差错，TCP将丢弃这个报文段和不确认收到此报文段。 </li>
-<li><strong>编号</strong>：TCP给发送的<strong>每一个包进行编号</strong>，接收方<strong>对数据包进行排序</strong>，把有序数据传送给应用层。 </li>
-<li><strong>超时重传</strong>：当TCP<strong>发出一个段后，它启动一个定时器</strong>，等待目的端确认收到这个报文段。如果不能及时收到一个确认，将重发这个报文段。 </li>
-<li><strong>滑动窗口</strong></li>
-<li><strong>拥塞控制</strong><h3 id="TCP的流量控制"><a href="#TCP的流量控制" class="headerlink" title="TCP的流量控制"></a><code>TCP</code>的流量控制</h3></li>
-</ol>
-</li>
-<li>流量控制说白了就是让发送方不要传的那么快，太快了来不及接收</li>
-<li>利用<code>滑动窗口</code>可以很方便地在TCP连接上实现对发送方的流量控制</li>
-</ul>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d4a4e28a42e54eee9fc028e5a3c8196f~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328162924958 - 副本.png"></p>
-<ul>
-<li><code>seq=1 DATA</code>：seq取值1，表示TCP报文段数据载荷的第一个字节的序号是1</li>
-<li><code>DATA</code>表示该报文段为TCP数据报文段</li>
-</ul>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/35f1f2a9f617428d8f37edc8dfac3c16~tplv-k3u1fbpfcp-watermark.image" alt="image-20210328163004482 - 副本.png"></p>
-<ul>
-<li><code>ACK</code>：TCP报文段首部中的标志位，取值1表示这是TCP确认报文段</li>
-<li><code>ack</code>：TCP报文段首部中的确认号字段，取值201表示序号201以前都正确接受，等待接受201后的数据</li>
-<li><code>rwnd</code>：TCP报文段首部中的窗口字段，取值300表示，接受窗口改为300</li>
-<li>只要TCP连接的一方，收到对方的<code>零窗口通知</code>，就启动一个<code>持续计时器</code>，若超时，就发送一个<code>零窗口探测报文（只携带1字节数据）</code>，接收方在收到<code>探测报文段</code>时，给出自己的<code>接收窗口值</code>。若依然是0，就重启计时器。</li>
-<li>事实上，TCP规定，即使接收窗口为0，也必须接收<code>零窗口探测报文段、确认报文段、带有紧急数据的报文段</code>。</li>
-<li><code>零窗口探测报文段</code>也有重传计时器，超时就重传。 </li>
 </ul>
 ]]></content>
       <categories>
