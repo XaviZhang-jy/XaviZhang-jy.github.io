@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>三次握手和四次挥手 |  Life Is a Movie！</title>
+      <title>计算机网络课堂小记（2） |  Life Is a Movie！</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -57,7 +57,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-三次握手和四次挥手"
+  id="post-计算机网络课堂小记（2）"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -68,7 +68,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  三次握手和四次挥手
+  计算机网络课堂小记（2）
 </h1>
  
 
@@ -76,11 +76,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" class="article-date">
-  <time datetime="2021-06-15T13:11:29.000Z" itemprop="datePublished">2021-06-15</time>
+      <a href="/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%882%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:26:31.000Z" itemprop="datePublished">2021-06-21</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/TCP/">TCP</a>
+    <a class="article-category-link" href="/categories/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/">课堂笔记</a>
   </div>
   
 <div class="word_count">
@@ -112,81 +112,115 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h3 id="TCP三次握手的过程（含状态转换，报文中的参数）"><a href="#TCP三次握手的过程（含状态转换，报文中的参数）" class="headerlink" title="TCP三次握手的过程（含状态转换，报文中的参数）"></a><code>TCP</code>三次握手的过程（含状态转换，报文中的参数）</h3><ul>
-<li><p>最开始，服务器端和客户端都会创建传输控制块：TCP连接表、指向发送和接收缓存的指针、只想重传队列的指针、当前的发送和接收序号等。</p>
-</li>
-<li><p>第一次握手：</p>
+  <h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><p>该博客为个人学习计算机网络时候做的一些笔记，作者水平很有限，如有错误和理解不对之处，欢迎指出！！！谢谢谢谢！！！</p>
+<p>学习课本以及资料为谢希仁老师的《计算机网络（第七版）》以及《自顶向下》。课程为韩立刚老师的视频，强推该老师视频，很棒棒~</p>
 <ul>
-<li>客户进程向服务器进程发送<code>TCP连接请求报文段</code>，然后客户端自己进入<code>同步已发送状态(SYN-SENT)</code>,报文首部中有个<code>同步位SYN</code>在这里被设置为<code>1</code>（为1表示这是一个TCP连接请求报文段），<code>序号字段seq</code>被设置为<code>x</code>（这个x是一个初始值，是TCP客户进程选择的一个初始序号）。 <em>TCP规定 SYN 为1的报文段不能携带数据，但需要小号一个序号。</em></li>
-<li>服务器端是被动建立连接，此时处于监听状态</li>
+<li>一大波概念即将来袭</li>
 </ul>
-</li>
-<li><p>第二次握手：</p>
-<ul>
-<li>服务器端接收到<code>TCP连接请求报文段</code>后进入<code>同步已接收状态</code>，并向服务器端发送<code>TCP连接请求确认报文段</code>，报文首部<code>同步位SYN设置为1，确认位ACK也设置为1</code>（表示这是一个TCP连接请求确认报文段），<code>序号字段seq</code>被设置了一个初始值y（TCP服务器进程选择的初始序号），<code>确认号ack字段</code>被设置成x+1，来表示收到了之前序号为x的连接请求。</li>
-</ul>
-</li>
-<li><p>第三次握手：</p>
-<ul>
-<li><p>客户端收到服务器发来的<code>确认报文段</code>后，还要发送一个<code>普通的TCP确认报文段</code>，同时服务器端进入<code>连接已建立状态</code>，该报文段的<code>首部确认位ACK</code>被设置为1，<code>序号字段seq</code>被设置为x+1，<code>确认号ack</code>被设置为y+1</p>
-<p><strong>TCP规定，普通的TCP确认报文段可以携带数据，如果不携带数据，就不消耗序号。</strong></p>
-</li>
-<li><p>服务器端接收到普通的确认报文段后进入连接状态</p>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d37a587af20544e3a8db6411d196aac7~tplv-k3u1fbpfcp-watermark.image" alt="image-20210330235638869.png"></p>
-<h3 id="TCP四次挥手的过程（含状态转换，报文中的参数）"><a href="#TCP四次挥手的过程（含状态转换，报文中的参数）" class="headerlink" title="TCP四次挥手的过程（含状态转换，报文中的参数）"></a><code>TCP</code>四次挥手的过程（含状态转换，报文中的参数）</h3><ul>
-<li><p>第一次挥手：</p>
-</li>
-<li><p>客户端进程向服务器进程发送<code>TCP连接释放报文段</code>，并进入<code>终止等待1 FIN-WAIT1</code>状态。该报文段首部中的<code>终止位FIN=1</code>,<code>确认位ACK=1</code>,表明这是一个TCP连接释放报文段。<strong>同时，这也是对之前收到的报文段的确认。</strong>序号seq字段的值设置位u，<code>u是TCP客户进程之前最后传送的数据的最后一个字节的序号+1</code>，FIN位1的报文段不带数据也要消耗报文段。<code>确认号ack=v，v表示TCP客户进程之前最后接收到的数据的最后一个字节的序号+1</code>。</p>
-</li>
-<li><p>第二次挥手：</p>
-<ul>
-<li>TCP服务器进程接收到连接释放报文段后，发送一个<code>普通的TCP确认报文段</code>并进入<code>关闭等待状态 CLOSE-WAIT</code>。该报文段的首部<code>确认位ACK=1</code>，表明这是一个普通的TCP确认报文段，<code>序号seq为v</code>，与第一次挥手的确认号匹配，<code>确认号ack=u+1</code>，是对第一次挥手的序号的确认。</li>
-</ul>
-<p><strong>此时，从TCP客户端到服务器端的进程就释放了。这时候TCP客户进程已经没有数据发送了，但是如果服务器还要发数据给客户端，客户进程还要接收。</strong></p>
-</li>
-<li><p>第三次挥手:</p>
-<ul>
-<li>TCP客户进程接收到TCP确认报文段后就进入<code>终止等待2状态 FIN-WAIT2</code>，等待TCP服务器发送<code>TCP连接释放报文段</code>。</li>
-<li>这时候TCP服务器进程发送<code>TCP连接释放报文段</code>，并进入<code>最后确认状态 LAST-ACK</code>。该报文段首部中的<code>终止位FIN=1</code>,<code>确认位ACK=1</code>,表明这是一个TCP连接释放报文段。<strong>同时，这也是对之前收到的报文段的确认。</strong>假定seq=w，不是u+1的原因是：可能在两次挥手后，服务器又发送了一些数据。确认号ack=u+1，这是对第一次挥手的重复确认。</li>
-</ul>
-</li>
-<li><p>第四次挥手：</p>
-<ul>
-<li>客户端接收连接释放报文段后，发送普通的确认保文段，并进入时间等待状态 TIME-WAIT。该报文段的首部<code>确认位ACK=1</code>，表明这是一个普通的TCP确认报文段，<code>序号seq为u+1</code>，是因为第一次挥手消耗了一个序号，<code>确认号ack=w+1</code>，是对第三次挥手的序号的确认。</li>
-<li>服务器接收到该报文段进入关闭状态，而客户进程要等<code>2MSL-&gt;最长报文段寿命，RFC793文档建议为2分钟</code>，也就是4分钟，才能进入关闭状态。</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ce5e437f8d7048cc9b1da73796a2d983~tplv-k3u1fbpfcp-watermark.image" alt="image-20210331173541393.png"></p>
-<h3 id="为什么不是两次握手？"><a href="#为什么不是两次握手？" class="headerlink" title="为什么不是两次握手？"></a>为什么不是两次握手？</h3><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a6898f5a03f4a668eedf625978fe34d~tplv-k3u1fbpfcp-watermark.image" alt="image-20210331132623522 - 副本.png"> </p>
-<ul>
-<li>两次握手，服务器端接收到第一次连接请求后就进入连接确认，客户端也不会发送普通确认报文段。</li>
-<li>如果第一次的TCP连接请求在网络中滞留了，那么他就会使得服务器端再一次直接进入连接已确认状态，而此时的客户端时关闭的，客户端无法被动建立连接，接收不到服务器的连接确认报文段，浪费网络资源。</li>
-</ul>
-<h3 id="第三次握手失败了怎么办？"><a href="#第三次握手失败了怎么办？" class="headerlink" title="第三次握手失败了怎么办？"></a>第三次握手失败了怎么办？</h3><ul>
-<li>在第二次握手后，服务器端会设置一个定时器，在等待客户端发回的第三次握手确认报文段。如果超时，则重传。如果超过规定次数（默认是5次），则服务器关闭这个连接。但是这时候，客户端认为该连接已建立，如果客户端向服务器端发送数据，服务器端以RST包回应<ul>
-<li>RST：RST标示复位、用来异常的关闭连接。<pre><code>     1. 发送RST包关闭连接时，不必等缓冲区的包都发出去，直接就丢弃缓冲区中的包，发送RST。
-         2. 而接收端收到RST包后，也不必发送ACK包来确认。
+<h2 id="网络的性能特性"><a href="#网络的性能特性" class="headerlink" title="网络的性能特性"></a>网络的性能特性</h2><h3 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h3><p>两种不同意义：</p>
+<ol>
+<li>“带宽”(bandwidth) 本来是指信号具有的频带宽度，其单位是赫（或千赫、兆赫、吉赫等）。</li>
+<li>在计算机网络中，带宽用来表示网络中某通道传送数据的能力。表示在单位时间内网络中的某信道所能通过的“最高数据率”。单位是 bit/s，即 “比特每秒”。    </li>
+</ol>
+<p><strong>在“带宽”的上述两种表述中，前者为频域称谓，而后者为时域称谓，其本质是相同的。也就是说，一条通信链路的“带宽”越宽，其所能传输的“最高数据率”也越高。</strong></p>
+<h3 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h3><ol>
+<li>比特（bit）是计算机中数据量的单位，也是信息论中使用的信息量的单位。</li>
+<li>比特（bit）来源于 binary digit，意思是一个“二进制数字”，因此一个比特就是二进制数字中的一个 1 或 0。</li>
+<li>速率是计算机网络中最重要的一个性能指标，指的是数据的传送速率，它也称为数据率 (data rate) 或比特率 (bit rate)。</li>
+<li>速率的单位是 bit/s，或 kbit/s、Mbit/s、 Gbit/s等。<pre><code>例如4 *10^10  bit/s 的数据率就记为 40 Gbit/s。
 </code></pre>
 </li>
-</ul>
+<li>速率往往是指额定速率或标称速率，非实际运行速率。 </li>
+</ol>
+<h3 id="带宽和速率两者之间的区别"><a href="#带宽和速率两者之间的区别" class="headerlink" title="带宽和速率两者之间的区别"></a>带宽和速率两者之间的区别</h3><p>很显然，这两者的单位都是bit/s，很容易让人混淆。这里，我们尝试对他们有个更加清晰的区分认识，在学习的时候发现了一个思路，就是从他的英文单词出发。速率是Date rate，带宽是Bandwidth。其中，速率平时被人们提及的次数很有限，而带宽这个词却常常被人挂在嘴边，包括我那个天天抱怨打王者卡顿的小老弟。</p>
+<p>速率，更多的是硬件的数据。就是说这个通道本身所能承载的最大信息传输速度。</p>
+<p>带宽，这有着更多可以做文章的空间。比如从服务器到客户机之间的传输，他们之间可能不止一条管道，它们之间的传输能力我们用带宽来表示。因为我们指的不是两者间某一条管道的传输速度，而是两者间的传输速度。</p>
+<h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><ol>
+<li>(throughput) 表示在单位时间内通过某个网络（或信道、接口）的数据量。</li>
+<li>吞吐量更经常地用于对现实世界中的网络的一种测量，以便知道实际上到底有多少数据量能够通过网络。</li>
+<li>吞吐量受网络的带宽或网络的额定速率的限制。   </li>
+</ol>
+<p>也就是说，吞吐量这个概念它包括了下载和上传的全部数据，如果下载和上传的带宽都是100M，那么吞吐量就是200M。</p>
+<h3 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h3><ol>
+<li><p>时延 (delay 或 latency) 是指数据（一个报文或分组，甚至比特）从网络（或链路）的一端传送到另一端所需的时间。</p>
 </li>
-</ul>
-<h3 id="为什么挥手要四次，而握手要三次？"><a href="#为什么挥手要四次，而握手要三次？" class="headerlink" title="为什么挥手要四次，而握手要三次？"></a>为什么挥手要四次，而握手要三次？</h3><ul>
-<li><p>在TCP建立连接时，有三次握手，第一次握手SYN=1时发起连接的同步位；第二次握手时，SYN=1和ACK=1同时被发送，也就是对<code>上一次收到的连接请求报文段的确认</code>和<code>这一次的连接请求</code>同时发送，也就是请求和确认在同一份报文中都有体现。</p>
+<li><p>有时也称为延迟或迟延。</p>
 </li>
-<li><p>但是第二次挥手，确认位ACK=1和终止位FIN=1没有一起发送，只发送了对第一次挥手的请求确认报文。因为服务器的数据可能没有发送完，所以需要在数据发送完后，再一次发送TCP连接释放请求。然后彻底释放连接。不能把第二次和第三次整合在一起。</p>
-<p>不能把第四次挥手去掉，如果第三次挥手报文丢失，没有回应。超时重传没办法开，没办法验证对方收到了该条报文。</p>
+<li><p>网络中的时延由以下几个不同的部分组成：</p>
+<ol>
+<li><p>发送时延：            </p>
+<ol>
+<li>也称为传输时延。</li>
+<li>发送数据时，数据帧从结点进入到传输媒体所需要的时间。</li>
+<li>也就是从发送数据帧的第一个比特算起，到该帧的最后一个比特发送完毕所需的时间。 </li>
+<li><strong>发送时延</strong> =<strong>数据帧长度（bit) / 发送速率（bit/s)</strong></li>
+<li>这个就好比时坐火车，火车离开出发站的时间，和火车长度和火车速度有关。就是那个小学数学题里火车头火车尾那玩意。</li>
+</ol>
+<p><strong>信号的发送速率和传播速率很不一样</strong></p>
 </li>
-</ul>
-<h3 id="为什么TIME-WAIT状态需要经历2MSL才能转换到CLOSE状态？"><a href="#为什么TIME-WAIT状态需要经历2MSL才能转换到CLOSE状态？" class="headerlink" title="为什么TIME_WAIT状态需要经历2MSL才能转换到CLOSE状态？"></a>为什么<code>TIME_WAIT</code>状态需要经历<code>2MSL</code>才能转换到<code>CLOSE</code>状态？</h3><ul>
-<li>如果第四次挥手丢失了，将导致第三次握手，也就是服务器的连接释放报文段的超时重传。但是如果这时候客户端已经关闭了，就接受不到了，服务器就会不断地重传，一直处于最后确认状态。</li>
-<li>另外，TCP客户进程发送完最后一个TCP确认报文段后，再经过2MSL时间，就可以把本次连接所产生的所以报文段都从网络中消失，防止下一个新的TCP连接中出现旧的报文段（这里的意思是有旧的报文段在网络中延误了吗）。</li>
-</ul>
+<li><p>传播时延</p>
+<ol>
+<li>电磁波在信道中需要传播一定的距离而花费的时间。 </li>
+<li>发送时延与传播时延有本质上的不同。</li>
+<li>信号发送速率和信号在信道上的传播速率是完全不同的概念。 </li>
+<li><strong>传播时延 = 信道长度（米）/ 信号在信道上的传播速率（米/秒）</strong></li>
+<li>这个就好比火车尾巴刚离开出发站到火车完全进入目的站的时间。和底线长度以及火车速度有关。</li>
+</ol>
+</li>
+<li><p>处理时延</p>
+<ol>
+<li>主机或路由器在收到分组时，为处理分组（例如分析首部、提取数据、差错检验或查找路由）所花费的时间。</li>
+<li>这个不就是火车的检票嘛</li>
+</ol>
+</li>
+<li><p>排队时延</p>
+<ol>
+<li>分组在路由器输入输出队列中排队等待处理所经历的时延。</li>
+<li>排队时延的长短往往取决于网络中当时的通信量。</li>
+<li>这个不就是检票出站时候的排队嘛</li>
+</ol>
+<p>所有时间加载一块，就是总的时延，而在总的时延中，到底是哪个时延占主导，这要看具体情况来分析。</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="容易错误的概念"><a href="#容易错误的概念" class="headerlink" title="容易错误的概念"></a>容易错误的概念</h3><ol>
+<li>对于高速网络链路，我们提高的<strong>仅仅是数据的发送速率</strong>而不是比特在链路上的传播速率。 </li>
+<li>提高链路带宽减小了<strong>数据的发送时延</strong>。</li>
+</ol>
+<h3 id="时延带宽积"><a href="#时延带宽积" class="headerlink" title="时延带宽积"></a>时延带宽积</h3><p><strong>链路的时延带宽积又称为以比特为单位的链路长度。</strong></p>
+<p>就是该通道被填满了，一点点都没有浪费的时候，所传播的比特数<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/521bb9687ae74bd1ad11b615f55a7781~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h3 id="往返时间"><a href="#往返时间" class="headerlink" title="往返时间"></a>往返时间</h3><ol>
+<li>互联网上的信息不仅仅单方向传输，而是双向交互的。因此，有时很需要知道双向交互一次所需的时间。</li>
+<li>**往返时间 RTT (round-trip time) **表示从发送方发送数据开始，到发送方收到来自接收方的确认，总共经历的时间。</li>
+<li>在互联网中，往返时间还包括各中间结点的处理时延、排队时延以及转发数据时的发送时延。</li>
+<li><strong>当使用卫星通信时，往返时间 RTT 相对较长，是很重要的一个性能指标。</strong>延迟比较大，但是带宽非常高。就比如说，我的冰冰在做现场采访时，转播室的主持人说一句话，冰冰要等一两秒才能听到。</li>
+</ol>
+<h3 id="信道利用率"><a href="#信道利用率" class="headerlink" title="信道利用率"></a>信道利用率</h3><ol>
+<li>分为信道利用率和网络利用率。<ol>
+<li>信道：一个发送端一个接收端加上中间的通路，成为一个信道</li>
+<li>网络：网络的出发点是网卡，它和所有信道有关</li>
+</ol>
+</li>
+<li>信道利用率指出某信道有百分之几的<strong>时间</strong>是被利用的（有数据通过）。</li>
+<li>完全空闲的信道的利用率是零。</li>
+<li>网络利用率则是全网络的信道利用率的<strong>加权平均值</strong>。</li>
+<li>信道利用率<strong>并非越高越好。当某信道的利用率增大时，该信道引起的时延也就迅速增加。</strong>（如果路上一眼看过去全是车，铁定堵死了）</li>
+</ol>
+<h3 id="时延与网络利用率的关系"><a href="#时延与网络利用率的关系" class="headerlink" title="时延与网络利用率的关系"></a><strong>时延与网络利用率的关系</strong></h3><ol>
+<li>根据排队论的理论，当某信道的利用率增大时，该信道引起的时延也就迅速增加。 </li>
+<li>若令 D0 表示网络空闲时的时延，D 表示网络当前的时延，则在适当的假定条件下，可以用下面的简单公式表示 D 和 D0 之间的关系： </li>
+</ol>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4944208b6af64ab2af148b8c812953b0~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>其中：</strong>U <strong>是网络的利用率，数值在</strong> <strong>0</strong> <strong>到</strong> <strong>1</strong> <strong>之间。</strong> </p>
+<h2 id="网络的非性能特性"><a href="#网络的非性能特性" class="headerlink" title="网络的非性能特性"></a>网络的非性能特性</h2><ol>
+<li>费用</li>
+<li>质量</li>
+<li>标准化</li>
+<li>可靠性</li>
+<li>可扩展性和可升级性 </li>
+<li>易于管理和维护 </li>
+</ol>
  
       <!-- reward -->
       
@@ -257,7 +291,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://shen-yu.gitee.io/2021/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://shen-yu.gitee.io/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%882%EF%BC%89/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -270,19 +304,19 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-nav-link">
+      <a href="/2021/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            计算机网络课堂小记（1）
+            Linux驱动开发学习笔记（1）
           
         </div>
       </a>
     
     
-      <a href="/2021/TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93/" class="article-nav-link">
+      <a href="/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">TCP如何保证可靠传输</div>
+        <div class="article-nav-title">计算机网络课堂小记（1）</div>
       </a>
     
   </nav>

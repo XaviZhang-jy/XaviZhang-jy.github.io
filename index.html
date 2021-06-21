@@ -153,6 +153,761 @@
     
     
     <article
+  id="post-多线程基础（2）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%EF%BC%882%EF%BC%89/"
+    >多线程基础（2）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%EF%BC%882%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:36:24.000Z" itemprop="datePublished">2021-06-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><ul>
+<li>本系列博客为学习Java多线程（狂神说）时所做的笔记</li>
+</ul>
+<h2 id="静态代理模式"><a href="#静态代理模式" class="headerlink" title="静态代理模式"></a>静态代理模式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//静态代理模式</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StacticProxy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        You you = <span class="keyword">new</span> You();</span><br><span class="line">        WeddingCompany weddingCompany = <span class="keyword">new</span> WeddingCompany(you);</span><br><span class="line">        weddingCompany.HappyMarry();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Marry</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">HappyMarry</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//真实角色</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">You</span> <span class="keyword">implements</span> <span class="title">Marry</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">HappyMarry</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我要结婚了！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//代理角色</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WeddingCompany</span> <span class="keyword">implements</span> <span class="title">Marry</span></span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Marry target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WeddingCompany</span><span class="params">(Marry target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">HappyMarry</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        before();</span><br><span class="line">        <span class="keyword">this</span>.target.HappyMarry();</span><br><span class="line">        after();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;收尾款&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;结婚之前，布置现场&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里是在创建代理对象时，将实体对象传入代理对象的构造函数，于是<strong>实体对象就是代理对象的内部类</strong>。</p>
+<p><strong>实体对象和代理对象都要实现同一个接口。</strong></p>
+<p>客户端调用代理对象的方法，而不是调用实体对象的方法。但是调用代理对象的方法的实质，就是调用实体对象的方法，只不过做了一层封装。</p>
+<h2 id="代理模式和多线程"><a href="#代理模式和多线程" class="headerlink" title="代理模式和多线程"></a>代理模式和多线程</h2><p>这里学习静态代理模式的原因是为了对多线程有一个更好的了解，多线程的Thread实现了Runnable接口，创建它的参数也实现了Runnable接口，所以Thread就是代理对象，传给他的参数对象就是实体对象。</p>
+<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9da06cb1dda640ddb67273677dcd8a44~tplv-k3u1fbpfcp-zoom-1.image" alt="这里写图片描述" style="zoom:50%;" /> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">Java多线程</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-多线程基础（1）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%EF%BC%881%EF%BC%89/"
+    >多线程基础（1）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%EF%BC%881%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:36:15.000Z" itemprop="datePublished">2021-06-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><ul>
+<li>本系列博客为学习Java多线程（狂神说）时所做的笔记</li>
+<li>本篇博客内容为多线程的三种创建方式</li>
+</ul>
+<h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><p><strong>进程(Process)：</strong> 进程是资源分配的基本单位，它是程序执行时的一个实例，在程序运行时创建。</p>
+<pre><code>进程是资源（CPU、内存等）分配的基本单位，它是程序执行时的一个实例。程序运行时系统就会创建一个进程，并为它分配资源，然后把该进程放入进程就绪队列。进程调度器选中它的时候就会为它分配CPU时间，程序开始真正运行。
+</code></pre>
+<p>**线程(Thread):**线程是程序执行的最小单位，是进程的一个执行流，一个线程由多个线程组成的。</p>
+<pre><code>线程是程序执行时的最小单位，它是进程的一个执行流，是CPU调度和分派的基本单位。一个进程可以由很多个线程组成，线程间共享进程的所有资源，每个线程有自己的堆栈和局部变量。线程由CPU独立调度执行，在多CPU环境下就允许多个线程同时运行。同样多线程也可以实现并发操作，每个请求分配一个线程来处理。                                                                                                                                        
+</code></pre>
+<p>—摘自<em>php中文网</em></p>
+<h2 id="程序和进程"><a href="#程序和进程" class="headerlink" title="程序和进程"></a>程序和进程</h2><p>由此可知，线程和进程之间有一种包含和被包含的关系，我们可以将进程和程序做一个比较。<strong>程序</strong>是指令和数据的有序集合，是一个静态的概念，而<strong>进程</strong>是动态的。</p>
+<p>而多线程则是多个线路同时运行，很多多线程都是模拟出来的，真正的多线程是指有多个cpu，即多核，如服务器。如果是模拟出来的多线程，在一个cpu下，同一个时间片内只能执行一个代码，由于时间片很短，切换的很快，看起来想同时执行，有一个宏观和微观的区别。</p>
+<h2 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h2><h3 id="三种创建方式"><a href="#三种创建方式" class="headerlink" title="三种创建方式"></a>三种创建方式</h3><h4 id="继承Thread类（重点）Thread类也继承了Runnable接口"><a href="#继承Thread类（重点）Thread类也继承了Runnable接口" class="headerlink" title="继承Thread类（重点）Thread类也继承了Runnable接口"></a>继承Thread类（重点）<em>Thread类也继承了Runnable接口</em></h4><pre><code>            1. 自定义线程类继承Thread类
+
+  2. 重现run()方法，编写线程执行体
+  3. 创建线程对象，调用start()方法启动线程
+</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建线程的方式一</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">testThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//run方法线程体</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;<span class="number">20</span>;i++)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在看代码---&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//main线程</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建一个线程</span></span><br><span class="line">        testThread thread1 = <span class="keyword">new</span> testThread();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//调用线程的start方法</span></span><br><span class="line">        thread1.start();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        这里我们需要注意的是，run()和start()是不一样的。</span></span><br><span class="line"><span class="comment">        run()方法它是只有主线程再运行，按顺序运行到run()</span></span><br><span class="line"><span class="comment">		时，把run运行完才继续，可以用嵌入式里的中断来理解。</span></span><br><span class="line"><span class="comment">		而start()是不一样的，start时多线程运行的，具体哪</span></span><br><span class="line"><span class="comment">		个时间片运行哪个线程纯看CPU心情。</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">//thread1.run();</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;<span class="number">20</span>;i++)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在学习---&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>小重点：线程开启不一定立即执行，具体有CPU调度。start()方法其实是开启了一个线程，然后这个线程里自行调用run()方法，小细节，嘿嘿嘿。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//多线程同步下载图片</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String url;<span class="comment">//网络图片地址</span></span><br><span class="line">    <span class="keyword">private</span> String name;<span class="comment">//保存的文件名字</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestThread</span><span class="params">(String url,String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.url = url;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//线程执行体</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        WebDownloader webDownloader = <span class="keyword">new</span> WebDownloader();</span><br><span class="line">        webDownloader.download(url,name);</span><br><span class="line">        System.out.println(<span class="string">&quot;下载了文件名为：&quot;</span>+name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestThread thread1 = <span class="keyword">new</span> TestThread(<span class="string">&quot;https://img.php.cn/upload/article/000/000/028/5ccfc59f97a82532.jpg&quot;</span>,<span class="string">&quot;thread1.jpg&quot;</span>);</span><br><span class="line">        TestThread thread2 = <span class="keyword">new</span> TestThread(<span class="string">&quot;https://img.php.cn/upload/article/000/000/028/5ccfc5a49e323744.jpg&quot;</span>,<span class="string">&quot;thread2.jpg&quot;</span>);</span><br><span class="line">        TestThread thread3 = <span class="keyword">new</span> TestThread(<span class="string">&quot;https://img.php.cn/upload/article/000/000/028/5ccfc5bfa2c62416.jpg&quot;</span>,<span class="string">&quot;thread3.jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//这个start启动不应该是按照顺序执行的吗？是由于启动时间比较久吗</span></span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line">        thread3.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//下载器</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebDownloader</span></span>&#123;</span><br><span class="line">    <span class="comment">//下载方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">download</span><span class="params">(String url,String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            FileUtils.copyURLToFile(<span class="keyword">new</span> URL(url),<span class="keyword">new</span> File(name));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println(<span class="string">&quot;IO异常,downloader方法出现问题&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个小测试，但是这里有一个问题，执行顺序很显然每次运行都是不一样的。但是这三个线程的start方法不应该是按顺序进行的吗？理论上不应该越靠前越有可能先执行吗？（博主还没有得出答案，欢迎大家指教！）</p>
+<h4 id="实现Runnable接口（核心重点）"><a href="#实现Runnable接口（核心重点）" class="headerlink" title="实现Runnable接口（核心重点）"></a>实现Runnable接口（核心重点）</h4><ol>
+<li>定义Runnable类实现Runnable接口</li>
+<li>实现run()方法，编写线程执行体</li>
+<li>创建线程对象，调用start()方法启动线程</li>
+</ol>
+<p><strong>推荐使用Runnable对象，因为Java单继承的局限性</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestThread3</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="comment">//run方法线程体</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;<span class="number">20</span>;i++)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在看代码---&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//main线程</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建一个接口的实现类对象</span></span><br><span class="line">        TestThread3 testThread3 = <span class="keyword">new</span> TestThread3();</span><br><span class="line">        <span class="comment">//创建一个线程对象，通过线程对象来开启</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(testThread3);</span><br><span class="line">        thread.start();</span><br><span class="line">        <span class="comment">//new Thread(testThread3).start();</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;<span class="number">20</span>;i++)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;我在学习---&quot;</span>+i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实Runnable接口也是利用了thread.start()，不过在创建thread的时候需要把实现了Runnable接口的对象作为参数传入其中。</p>
+<h5 id="第一种和第二种的部分区别"><a href="#第一种和第二种的部分区别" class="headerlink" title="第一种和第二种的部分区别"></a>第一种和第二种的部分区别</h5><p>第一种不建议使用，因为Java不可以多继承，一个对象无法被多个线程使用。</p>
+<p>第二章避免了单继承局限性，方便一个对象被多个线程使用。</p>
+<h4 id="演示多个线程操作同一个对象"><a href="#演示多个线程操作同一个对象" class="headerlink" title="演示多个线程操作同一个对象"></a>演示多个线程操作同一个对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//多个线程操作同一个资源的时候，线程不安全，数据紊乱</span></span><br><span class="line"><span class="comment">//多个线程同时操作一个对象</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestThread4</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> ticketNums = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (ticketNums &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot;拿到了第&quot;</span>+ticketNums--+<span class="string">&quot;票&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestThread4 testThread4 = <span class="keyword">new</span> TestThread4();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(testThread4,<span class="string">&quot;小明&quot;</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(testThread4,<span class="string">&quot;老师&quot;</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(testThread4,<span class="string">&quot;黄牛&quot;</span>).start();</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据狂神说的课程，跟着敲了个龟兔赛跑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//模拟龟兔赛跑</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Race</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="comment">//胜利者</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String winner;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//这里i=1吧，按照课程里为0的话，这兔子直接被扼杀在了起跑线，太惨了</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">1</span>;i&lt;=<span class="number">100</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (Thread.currentThread().getName().equals(<span class="string">&quot;兔子&quot;</span>) &amp;&amp; i%<span class="number">10</span>==<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">1</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">boolean</span> flag = gameOver(i);</span><br><span class="line">            <span class="keyword">if</span> (flag == <span class="keyword">true</span>)&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot;--&gt;跑了&quot;</span>+i+<span class="string">&quot;步&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//判断是否结束</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">gameOver</span><span class="params">(<span class="keyword">int</span> steps)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (winner != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (steps == <span class="number">100</span>)&#123;</span><br><span class="line">                winner = Thread.currentThread().getName();</span><br><span class="line">                System.out.println(<span class="string">&quot;winner is &quot;</span>+winner);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Race race = <span class="keyword">new</span> Race();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(race,<span class="string">&quot;兔子&quot;</span>).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(race,<span class="string">&quot;乌龟&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="实现Callable接口（了解）"><a href="#实现Callable接口（了解）" class="headerlink" title="实现Callable接口（了解）"></a>实现Callable接口（了解）</h4><p><strong>流程</strong>：</p>
+<ol>
+<li>实现Callable接口，需要返回值类型</li>
+<li>重写call方法，需要抛出异常</li>
+<li>创建目标对象</li>
+<li>创建执行文件：ExecutorService ser = Executors.newFixThreadPool(1);</li>
+<li>提交执行:Future<Boolean> result1 = ser.submit(1);</li>
+<li>获取结果:boolean r1 = result1.get();</li>
+<li>关闭服务: ser.shutdownNow();</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Testdemo5</span>  <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Boolean</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String url;<span class="comment">//网络图片地址</span></span><br><span class="line">    <span class="keyword">private</span> String name;<span class="comment">//保存的文件名字</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Testdemo5</span><span class="params">(String url,String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.url = url;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        WebDownloader webDownloader = <span class="keyword">new</span> WebDownloader();</span><br><span class="line">        webDownloader.download(url,name);</span><br><span class="line">        System.out.println(<span class="string">&quot;下载了文件名为：&quot;</span>+name);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">        Testdemo5 thread1 = <span class="keyword">new</span> Testdemo5(<span class="string">&quot;https://img.php.cn/upload/article/000/000/028/5ccfc59f97a82532.jpg&quot;</span>,<span class="string">&quot;thread1.jpg&quot;</span>);</span><br><span class="line">        Testdemo5 thread2 = <span class="keyword">new</span> Testdemo5(<span class="string">&quot;https://img.php.cn/upload/article/000/000/028/5ccfc5a49e323744.jpg&quot;</span>,<span class="string">&quot;thread2.jpg&quot;</span>);</span><br><span class="line">        Testdemo5 thread3 = <span class="keyword">new</span> Testdemo5(<span class="string">&quot;https://img.php.cn/upload/article/000/000/028/5ccfc5bfa2c62416.jpg&quot;</span>,<span class="string">&quot;thread3.jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//1. 创建执行文件：ExecutorService ser = Executors.newFixedThreadPool(1);//创建线程池</span></span><br><span class="line">        ExecutorService ser = Executors.newFixedThreadPool(<span class="number">3</span>);</span><br><span class="line">        <span class="comment">//2. 提交执行:Future&lt;Boolean&gt; result1 = ser.submit(t1);//提交执行</span></span><br><span class="line">        Future&lt;Boolean&gt; result1 = ser.submit(thread1);</span><br><span class="line">        Future&lt;Boolean&gt; result2 = ser.submit(thread2);</span><br><span class="line">        Future&lt;Boolean&gt; result3 = ser.submit(thread3);</span><br><span class="line">        <span class="comment">//3. 获取结果:boolean r1 = result1.get();</span></span><br><span class="line">        <span class="keyword">boolean</span> rs1 = result1.get();</span><br><span class="line">        <span class="keyword">boolean</span> rs2 = result2.get();</span><br><span class="line">        <span class="keyword">boolean</span> rs3 = result3.get();</span><br><span class="line">        System.out.println(rs1 +<span class="string">&quot;|&quot;</span>+ rs2 +<span class="string">&quot;|&quot;</span>+ rs3);</span><br><span class="line">        <span class="comment">//4. 关闭服务: ser.shutdownNow();</span></span><br><span class="line">        ser.shutdownNow();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好处：</p>
+<ol>
+<li><p>可以检查返回值</p>
+</li>
+<li><p>可以抛出异常</p>
+</li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">Java多线程</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Linux驱动开发学习笔记（3）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89/"
+    >Linux驱动开发学习笔记（3）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:29:17.000Z" itemprop="datePublished">2021-06-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux%E9%A9%B1%E5%8A%A8/">Linux驱动</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="总线设备驱动模型"><a href="#总线设备驱动模型" class="headerlink" title="总线设备驱动模型"></a>总线设备驱动模型</h1><p><u>2020.12.4</u></p>
+<p><em>分析总线驱动模型是为了搞清楚总线是如何将driver和device匹配的，即当我们插入我们的设备时，总线是如何找到这个设备对应的驱动，并且调用驱动的probe函数的。不管是先有驱动后有设备、还是先有设备后有驱动。都会调用驱动driver中的probe，而不是设备device。</em></p>
+<h3 id="总线的引入："><a href="#总线的引入：" class="headerlink" title="总线的引入："></a>总线的引入：</h3><p>首先，驱动设计从直接操作寄存器，每一次修改都要很费劲；到实现驱动程序的第一次</p>
+<p>分层，分为了两层，实现了更换单板或芯片时修改更加方便；再到所谓的“分离”，做到</p>
+<p>了修改引脚也可以更加的方便。可以说是把分层后的第二层给再细分一下。</p>
+<p>在前面，我们为了给硬件分配所谓的“资源”，定义了一个 <strong>led_resouce 结构体</strong>。很显然，给每个设备都定义一个结构体，太麻烦了，很有重复造轮子的感觉。所以，出现了“平台”这个概念，也就是platform_device结构体，它里面允许我们来定义各种硬件的资源。</p>
+<p>到目前为止，都是对硬件的指定的框架在变化，而对硬件的操作，也就是要利用这些硬件达到什么效果，这些并没有什么变化：</p>
+<ol>
+<li><p>分配\设置\注册 fileoperation结构体</p>
+</li>
+<li><p>使用ioremap映射寄存器</p>
+</li>
+<li><p>再对寄存器进行操作</p>
+</li>
+</ol>
+<p>因此右侧的driver结构体并没有本质的变化，那么问题来了，这两个平台如何一一对应？这就要交给总线结构了，先放一放，我们先看看platform_device结构体长什么样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">platform_device</span> <span class="title">board_A_led_dev</span>  =</span> &#123;</span><br><span class="line">	.name = <span class="string">&quot;100ask_led&quot;</span>,</span><br><span class="line">	.num_resources = ARRAY_SIZE(resources),</span><br><span class="line">	.resource = resources,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>原来如此，老朋友“资源”被定义在了platform_device结构体的resources里，不过值得注意的是，在结构体的私有数据里也可以定义“资源”。不过在resources里定义时，要遵守一定的规则。</p>
+<p>当device和driver配对成功时，driver的probe函数就会被调用，然后依然只是对硬件操作的老三步。</p>
+<p>而总线驱动模型的另一个需要注意的地方就是，这个总线的两端连着一堆platform_device和platform_driver，他们是怎么互相找到对方的呢？</p>
+<p>所以进入到下一个环节：</p>
+<h3 id="总线的配对："><a href="#总线的配对：" class="headerlink" title="总线的配对："></a>总线的配对：</h3><p><strong>① 最先比较：是否强制选择某个 driver</strong></p>
+<p>比较 platform_device. driver_override 和 platform_driver.driver.name</p>
+<p>可以设置 platform_device 的 driver_override，强制选择某个 platform_driver。</p>
+<p><strong>② 然后比较：设备树信息</strong></p>
+<p>比较：platform_device. dev.of_node 和 platform_driver.driver.of_match_table。</p>
+<p>由设备树节点转换得来的 platform_device 中，含有一个结构体：of_node。</p>
+<p>如果一个 platform_driver 支持设备树，它的 platform_driver.driver.of_match_table 是一个数组。</p>
+<p>使用设备树信息来判断 dev 和 drv 是否配对时，</p>
+<p>首先，如果 of_match_table 中含有 compatible 值，就跟 dev 的 compatile 属性比较，若</p>
+<p>一致则成功，否则返回失败；</p>
+<p>其次，如果 of_match_table 中含有 type 值，就跟 dev 的 device_type 属性比较，若一致</p>
+<p>则成功，否则返回失败；</p>
+<p>最后，如果 of_match_table 中含有 name 值，就跟 dev 的 name 属性比较，若一致则成</p>
+<p>功，否则返回失败。</p>
+<p>而设备树中建议不再使用 devcie_type 和 name 属性，所以基本上只使用设备节点的</p>
+<p>compatible 属性来寻找匹配的 platform_driver。</p>
+<p><strong>③ 接下来比较：platform_device_id</strong></p>
+<p>比较platform_device. name和platform_driver.id_table[i].name，</p>
+<p>id_table中可能有多项。</p>
+<p>platform_driver.id_table 是“platform_device_id”指针，表示该 drv 支持若干个 device，它</p>
+<p>里面列出了各个 device 的{.name, .driver_data}，其中的“name”表示该 drv 支持的设备的名</p>
+<p>字，driver_data 是些提供给该 device 的私有数据。</p>
+<p><strong>④ 最后比较：platform_device.name 和 platform_driver.driver.name</strong></p>
+<p>platform_driver.id_table 可能为空，</p>
+<p>这时可以根据 platform_driver.driver.name 来寻找同名的 platform_device。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" rel="tag">Linux驱动开发</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Linux驱动开发学习笔记（2）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89/"
+    >Linux驱动开发学习笔记（2）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:28:59.000Z" itemprop="datePublished">2021-06-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux%E9%A9%B1%E5%8A%A8/">Linux驱动</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><u>2020.12.2</u></p>
+<p><u>学习到了更进一步的驱动设计的思想：</u></p>
+<ol>
+<li>面对对象</li>
+<li>分层</li>
+<li>分离</li>
+</ol>
+<h2 id="面向对象部分："><a href="#面向对象部分：" class="headerlink" title="面向对象部分："></a>面向对象部分：</h2><p>字符设备驱动程序抽象出一个 file_operations 结构体</p>
+<p>我们写的程序针对硬件部分抽象出 led_operations 结构体</p>
+<p><strong>其实也就是将所谓的事件给抽象出一个结构体，然后对这些结构体定义进我们需要的内容，来对这个事件进行控制，达到我们想要的效果，这部分在上一篇笔记里有。</strong></p>
+<h3 id="分层的思想："><a href="#分层的思想：" class="headerlink" title="分层的思想："></a>分层的思想：</h3><p>和上一篇笔记中所写的一样，初步分为两层：</p>
+<p>控制层、硬件层</p>
+<p>控制层表示做什么，怎么做；硬件层表示让谁做。我想要用单板A来点灯，现在换成单板B，我只需要修改硬件层即可。优秀的点灯工程师必备素质。</p>
+<h3 id="分离的思想："><a href="#分离的思想：" class="headerlink" title="分离的思想："></a>分离的思想：</h3><p>就算是同一块单板，同一块芯片，说到底就是操作引脚或是操作各种寄存器，我们原本的分层是对不同单板做区分，便于修改，现在就是对于不同的引脚做区分，便于修改。</p>
+<p><strong>以面向对象的思想，在 board_A_led.c 中实现 led_resouce 结构体，它定义“资源”──要用哪一个引脚。仍实现 led_operations 结构体，它要写得更完善，支持所有 GPIO。</strong></p>
+<h3 id="从代码来看："><a href="#从代码来看：" class="headerlink" title="从代码来看："></a>从代码来看：</h3><p>*根据示例代码来看，也就是说在led_resource.h里定义一个led_resource结构体来存放引脚信息，并且通过对地址的宏定义来让地址的修改更加方便。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GROUP(x) (x&gt;&gt;16)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PIN(x)   (x&amp;0xFFFF)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GROUP_PIN(g,p) ((g&lt;&lt;16) | (p))</span></span><br></pre></td></tr></table></figure>
+<p><em>然后在board_A_led.c里填充这个结构体，也就是指定我们要的所谓”资源”。</em></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;led_resource.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">led_resource</span> <span class="title">board_A_led</span> =</span> &#123;</span><br><span class="line">	.pin = <span class="built_in">GROUP_PIN</span>(<span class="number">3</span>,<span class="number">1</span>),</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">struct led_resource *<span class="title">get_led_resouce</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;board_A_led;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><em>最后在chio_dome_gpio.c里实现这个操作，将单板层面的修改和芯片引脚层面的修改都做到了进步</em></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct led_operations *<span class="title">get_board_led_opr</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;board_demo_led_opr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有时间画个图梳理一下(逃</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" rel="tag">Linux驱动开发</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Linux驱动开发学习笔记（1）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/"
+    >Linux驱动开发学习笔记（1）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:28:42.000Z" itemprop="datePublished">2021-06-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux%E9%A9%B1%E5%8A%A8/">Linux驱动</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><u>2020.11.25</u><br><u>韦东山视频学习笔记</u></p>
+<h1 id="字符设备驱动程序框架"><a href="#字符设备驱动程序框架" class="headerlink" title="字符设备驱动程序框架"></a>字符设备驱动程序框架</h1><h3 id="总体来说，分为-APP应用层、驱动层、硬件层-这三个层面"><a href="#总体来说，分为-APP应用层、驱动层、硬件层-这三个层面" class="headerlink" title="总体来说，分为++APP应用层、驱动层、硬件层++这三个层面"></a>总体来说，分为++APP应用层、驱动层、硬件层++这三个层面</h3><p>应该和STM32的开发方式可能比较接近吧。硬件小哥画原理图画PCB焊板子（硬件层），企业帮我们做好了函数的封装，让我们刻意调用标准库或者HAL库来开发，而不需要直接操作寄存器（驱动层），我们通过调用需要的函数来初始化等等（应用层） </p>
+<p>暂时这样理解吧…….</p>
+<ul>
+<li>APP层面的应用开发，有各种的函数调用，这些函数会在驱动程序中编写完善。所以APP不直接和硬件打交道，没有办法做一个光荣的  “点灯工程师”</li>
+<li>Driver：驱动层，对具体的函数来进行编写，通过和硬件打交道，控制寄存器等等来达到我们想要的效果</li>
+<li>硬件层：老本行就不记笔记了</li>
+</ul>
+<h3 id="驱动程序的编写流程"><a href="#驱动程序的编写流程" class="headerlink" title="驱动程序的编写流程"></a>驱动程序的编写流程</h3><ol>
+<li><p>确定主设备号，也可以让内核来分配</p>
+</li>
+<li><p>定义一个file_operations结构体，这个结构体相当于把我们这个驱动要完成的事件给抽象出来</p>
+</li>
+<li><p>实现对应的drv_open/drv_read/drv_write函数，这些函数和应用层的函数都有所对应。把这些函数填入file_operations结构体里。</p>
+</li>
+<li><p>用register_chrdev来把file_operations结构体告诉内核，把他注册进内核</p>
+</li>
+<li><p>入口函数：在安装驱动时会调用这个函数，由他来注册驱动函数</p>
+</li>
+<li><p>出口函数：unregister_chrdev,出口函数会调用这个函数</p>
+</li>
+<li><p>其他的完善：提供设备信息，自动创建设备节点：class_create,device_create</p>
+</li>
+</ol>
+<h3 id="小细节："><a href="#小细节：" class="headerlink" title="小细节："></a>小细节：</h3><ol>
+<li>驱动程序根据主设备号来知道我们要驱动什么类型的设备：LED、OLED</li>
+<li>驱动程序根据次设备号来知道我们要驱动哪一个设备：LED_1 or LED_2</li>
+</ol>
+<h3 id="驱动程序的分层："><a href="#驱动程序的分层：" class="headerlink" title="驱动程序的分层："></a>驱动程序的分层：</h3><p><strong>个人拙见：还是和STM32的开发做对比，分层就相当于同一个模块的代码，可以给不同型号的芯片使用，只需要修改他的引脚或者状态就可以完美移植，这就是分层。XX小车之家的MPU6050的代码封装就很好，只需要做设定上的修改，就可以实现我想要的功能，嘿嘿嘿</strong></p>
+<h3 id="这里我的理解是，将驱动程序进一步分层，暂时分为上下两层："><a href="#这里我的理解是，将驱动程序进一步分层，暂时分为上下两层：" class="headerlink" title="这里我的理解是，将驱动程序进一步分层，暂时分为上下两层："></a>这里我的理解是，将驱动程序进一步分层，暂时分为上下两层：</h3><ol>
+<li>上层是让硬件实现具体效果的代码，它的核心对象是file_operations结构体<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">led_drv</span> =</span> &#123;</span><br><span class="line">.owner = THIS_MODULE,</span><br><span class="line">.open = led_drv_open,</span><br><span class="line">.read = led_drv_read,</span><br><span class="line">.write = led_drv_write,</span><br><span class="line">.release = led_drv_close,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>下层是具体到哪一个硬件，作出什么动作的指令式的代码，它的核心对象是led_operations<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">led_operations</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> (*init) (<span class="keyword">int</span> which); <span class="comment">/* 初始化 LED, which-哪个 LED */</span></span><br><span class="line">    <span class="keyword">int</span> (*ctl) (<span class="keyword">int</span> which, <span class="keyword">char</span> status); <span class="comment">/* 控制 LED, which-哪个 LED, status:1-亮,0-灭*/</span></span><br><span class="line"> &#125;;</span><br><span class="line"><span class="function">struct led_operations *<span class="title">get_board_led_opr</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="comment">/*************分割线***************************/</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">led_operations</span> <span class="title">board_demo_led_opr</span> =</span> &#123;</span><br><span class="line">	.init = board_demo_led_init,</span><br><span class="line">	.ctl  = board_demo_led_ctl,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//这里对这个结构体做定义</span></span><br></pre></td></tr></table></figure>
+下面是韦老师的驱动程序代码：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 1. 确定主设备号                                                                 */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> major = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="keyword">class</span> *<span class="title">led_class</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">led_operations</span> *<span class="title">p_led_opr</span>;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MIN(a, b) (a &lt; b ? a : b)</span></span><br><span class="line"><span class="comment">/* 3. 实现对应的open/read/write等函数，填入file_operations结构体                   */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">led_drv_read</span> <span class="params">(struct file *file, <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> size, <span class="keyword">loff_t</span> *offset)</span></span></span><br><span class="line"><span class="function"></span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* write(fd, &amp;val, 1); */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">ssize_t</span> <span class="title">led_drv_write</span> <span class="params">(struct file *file, <span class="keyword">const</span> <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> size, <span class="keyword">loff_t</span> *offset)</span></span></span><br><span class="line"><span class="function"></span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">led_drv_open</span> <span class="params">(struct inode *node, struct file *file)</span></span></span><br><span class="line"><span class="function"></span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">led_drv_close</span> <span class="params">(struct inode *node, struct file *file)</span></span></span><br><span class="line"><span class="function"></span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*2. 定义自己的file_operations结构体将我们需要的函数定义成我们想要的*/</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">led_drv</span> =</span> &#123;</span><br><span class="line">	.owner	 = THIS_MODULE,</span><br><span class="line">	.open    = led_drv_open,</span><br><span class="line">	.read    = led_drv_read,</span><br><span class="line">	.write   = led_drv_write,</span><br><span class="line">	.release = led_drv_close,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 4. 把file_operations结构体告诉内核：注册驱动程序                                */</span></span><br><span class="line"><span class="comment">/* 5. 谁来注册驱动程序啊？得有一个入口函数：安装驱动程序时，就会去调用这个入口函数 */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> __init <span class="title">led_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 6. 有入口函数就应该有出口函数：卸载驱动程序时，就会去调用这个出口函数           */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> __exit <span class="title">led_exit</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;......&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 7. 其他完善：提供设备信息，自动创建设备节点                                     */</span></span><br><span class="line"></span><br><span class="line">module_init(led_init);</span><br><span class="line">module_exit(led_exit);</span><br><span class="line"></span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="心得：大概的了解了驱动程序和应用程序之间的关系，以及驱动程序的大概框架。"><a href="#心得：大概的了解了驱动程序和应用程序之间的关系，以及驱动程序的大概框架。" class="headerlink" title="心得：大概的了解了驱动程序和应用程序之间的关系，以及驱动程序的大概框架。"></a>心得：大概的了解了驱动程序和应用程序之间的关系，以及驱动程序的大概框架。</h4>零碎的知识点：</li>
+</ol>
+<p>1、C语言的函数指针</p>
+<p>2、C语言的这种面向对象的特性和C++的面向对象特性有何不同，有待总结。</p>
+<p>3、还有一点是 MODULE_LICENSE(“GPL”); 这一句代码，这个是模块的许可声明，没加会报错：</p>
+<pre><code>从2.4.10版本内核开始，模块必须通过MODULE_LICENSE宏声明此模块的许可
+
+证，否则在加载此模块时，会收到内核被污染 “kernel tainted”
+
+的警告。从linux/module.h文件中可以看到，被内核接受的有意义的许可证有
+
+“GPL”，“GPL v2”，“GPL and additional rights”，“Dual BSD/GPL”，“Dual
+
+MPL/GPL”，“Proprietary”。
+</code></pre>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" rel="tag">Linux驱动开发</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-计算机网络课堂小记（2）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%882%EF%BC%89/"
+    >计算机网络课堂小记（2）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%882%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:26:31.000Z" itemprop="datePublished">2021-06-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/">课堂笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><p>该博客为个人学习计算机网络时候做的一些笔记，作者水平很有限，如有错误和理解不对之处，欢迎指出！！！谢谢谢谢！！！</p>
+<p>学习课本以及资料为谢希仁老师的《计算机网络（第七版）》以及《自顶向下》。课程为韩立刚老师的视频，强推该老师视频，很棒棒~</p>
+<ul>
+<li>一大波概念即将来袭</li>
+</ul>
+<h2 id="网络的性能特性"><a href="#网络的性能特性" class="headerlink" title="网络的性能特性"></a>网络的性能特性</h2><h3 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h3><p>两种不同意义：</p>
+<ol>
+<li>“带宽”(bandwidth) 本来是指信号具有的频带宽度，其单位是赫（或千赫、兆赫、吉赫等）。</li>
+<li>在计算机网络中，带宽用来表示网络中某通道传送数据的能力。表示在单位时间内网络中的某信道所能通过的“最高数据率”。单位是 bit/s，即 “比特每秒”。    </li>
+</ol>
+<p><strong>在“带宽”的上述两种表述中，前者为频域称谓，而后者为时域称谓，其本质是相同的。也就是说，一条通信链路的“带宽”越宽，其所能传输的“最高数据率”也越高。</strong></p>
+<h3 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h3><ol>
+<li>比特（bit）是计算机中数据量的单位，也是信息论中使用的信息量的单位。</li>
+<li>比特（bit）来源于 binary digit，意思是一个“二进制数字”，因此一个比特就是二进制数字中的一个 1 或 0。</li>
+<li>速率是计算机网络中最重要的一个性能指标，指的是数据的传送速率，它也称为数据率 (data rate) 或比特率 (bit rate)。</li>
+<li>速率的单位是 bit/s，或 kbit/s、Mbit/s、 Gbit/s等。<pre><code>例如4 *10^10  bit/s 的数据率就记为 40 Gbit/s。
+</code></pre>
+</li>
+<li>速率往往是指额定速率或标称速率，非实际运行速率。 </li>
+</ol>
+<h3 id="带宽和速率两者之间的区别"><a href="#带宽和速率两者之间的区别" class="headerlink" title="带宽和速率两者之间的区别"></a>带宽和速率两者之间的区别</h3><p>很显然，这两者的单位都是bit/s，很容易让人混淆。这里，我们尝试对他们有个更加清晰的区分认识，在学习的时候发现了一个思路，就是从他的英文单词出发。速率是Date rate，带宽是Bandwidth。其中，速率平时被人们提及的次数很有限，而带宽这个词却常常被人挂在嘴边，包括我那个天天抱怨打王者卡顿的小老弟。</p>
+<p>速率，更多的是硬件的数据。就是说这个通道本身所能承载的最大信息传输速度。</p>
+<p>带宽，这有着更多可以做文章的空间。比如从服务器到客户机之间的传输，他们之间可能不止一条管道，它们之间的传输能力我们用带宽来表示。因为我们指的不是两者间某一条管道的传输速度，而是两者间的传输速度。</p>
+<h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><ol>
+<li>(throughput) 表示在单位时间内通过某个网络（或信道、接口）的数据量。</li>
+<li>吞吐量更经常地用于对现实世界中的网络的一种测量，以便知道实际上到底有多少数据量能够通过网络。</li>
+<li>吞吐量受网络的带宽或网络的额定速率的限制。   </li>
+</ol>
+<p>也就是说，吞吐量这个概念它包括了下载和上传的全部数据，如果下载和上传的带宽都是100M，那么吞吐量就是200M。</p>
+<h3 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h3><ol>
+<li><p>时延 (delay 或 latency) 是指数据（一个报文或分组，甚至比特）从网络（或链路）的一端传送到另一端所需的时间。</p>
+</li>
+<li><p>有时也称为延迟或迟延。</p>
+</li>
+<li><p>网络中的时延由以下几个不同的部分组成：</p>
+<ol>
+<li><p>发送时延：            </p>
+<ol>
+<li>也称为传输时延。</li>
+<li>发送数据时，数据帧从结点进入到传输媒体所需要的时间。</li>
+<li>也就是从发送数据帧的第一个比特算起，到该帧的最后一个比特发送完毕所需的时间。 </li>
+<li><strong>发送时延</strong> =<strong>数据帧长度（bit) / 发送速率（bit/s)</strong></li>
+<li>这个就好比时坐火车，火车离开出发站的时间，和火车长度和火车速度有关。就是那个小学数学题里火车头火车尾那玩意。</li>
+</ol>
+<p><strong>信号的发送速率和传播速率很不一样</strong></p>
+</li>
+<li><p>传播时延</p>
+<ol>
+<li>电磁波在信道中需要传播一定的距离而花费的时间。 </li>
+<li>发送时延与传播时延有本质上的不同。</li>
+<li>信号发送速率和信号在信道上的传播速率是完全不同的概念。 </li>
+<li><strong>传播时延 = 信道长度（米）/ 信号在信道上的传播速率（米/秒）</strong></li>
+<li>这个就好比火车尾巴刚离开出发站到火车完全进入目的站的时间。和底线长度以及火车速度有关。</li>
+</ol>
+</li>
+<li><p>处理时延</p>
+<ol>
+<li>主机或路由器在收到分组时，为处理分组（例如分析首部、提取数据、差错检验或查找路由）所花费的时间。</li>
+<li>这个不就是火车的检票嘛</li>
+</ol>
+</li>
+<li><p>排队时延</p>
+<ol>
+<li>分组在路由器输入输出队列中排队等待处理所经历的时延。</li>
+<li>排队时延的长短往往取决于网络中当时的通信量。</li>
+<li>这个不就是检票出站时候的排队嘛</li>
+</ol>
+<p>所有时间加载一块，就是总的时延，而在总的时延中，到底是哪个时延占主导，这要看具体情况来分析。</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="容易错误的概念"><a href="#容易错误的概念" class="headerlink" title="容易错误的概念"></a>容易错误的概念</h3><ol>
+<li>对于高速网络链路，我们提高的<strong>仅仅是数据的发送速率</strong>而不是比特在链路上的传播速率。 </li>
+<li>提高链路带宽减小了<strong>数据的发送时延</strong>。</li>
+</ol>
+<h3 id="时延带宽积"><a href="#时延带宽积" class="headerlink" title="时延带宽积"></a>时延带宽积</h3><p><strong>链路的时延带宽积又称为以比特为单位的链路长度。</strong></p>
+<p>就是该通道被填满了，一点点都没有浪费的时候，所传播的比特数<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/521bb9687ae74bd1ad11b615f55a7781~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<h3 id="往返时间"><a href="#往返时间" class="headerlink" title="往返时间"></a>往返时间</h3><ol>
+<li>互联网上的信息不仅仅单方向传输，而是双向交互的。因此，有时很需要知道双向交互一次所需的时间。</li>
+<li>**往返时间 RTT (round-trip time) **表示从发送方发送数据开始，到发送方收到来自接收方的确认，总共经历的时间。</li>
+<li>在互联网中，往返时间还包括各中间结点的处理时延、排队时延以及转发数据时的发送时延。</li>
+<li><strong>当使用卫星通信时，往返时间 RTT 相对较长，是很重要的一个性能指标。</strong>延迟比较大，但是带宽非常高。就比如说，我的冰冰在做现场采访时，转播室的主持人说一句话，冰冰要等一两秒才能听到。</li>
+</ol>
+<h3 id="信道利用率"><a href="#信道利用率" class="headerlink" title="信道利用率"></a>信道利用率</h3><ol>
+<li>分为信道利用率和网络利用率。<ol>
+<li>信道：一个发送端一个接收端加上中间的通路，成为一个信道</li>
+<li>网络：网络的出发点是网卡，它和所有信道有关</li>
+</ol>
+</li>
+<li>信道利用率指出某信道有百分之几的<strong>时间</strong>是被利用的（有数据通过）。</li>
+<li>完全空闲的信道的利用率是零。</li>
+<li>网络利用率则是全网络的信道利用率的<strong>加权平均值</strong>。</li>
+<li>信道利用率<strong>并非越高越好。当某信道的利用率增大时，该信道引起的时延也就迅速增加。</strong>（如果路上一眼看过去全是车，铁定堵死了）</li>
+</ol>
+<h3 id="时延与网络利用率的关系"><a href="#时延与网络利用率的关系" class="headerlink" title="时延与网络利用率的关系"></a><strong>时延与网络利用率的关系</strong></h3><ol>
+<li>根据排队论的理论，当某信道的利用率增大时，该信道引起的时延也就迅速增加。 </li>
+<li>若令 D0 表示网络空闲时的时延，D 表示网络当前的时延，则在适当的假定条件下，可以用下面的简单公式表示 D 和 D0 之间的关系： </li>
+</ol>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4944208b6af64ab2af148b8c812953b0~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><strong>其中：</strong>U <strong>是网络的利用率，数值在</strong> <strong>0</strong> <strong>到</strong> <strong>1</strong> <strong>之间。</strong> </p>
+<h2 id="网络的非性能特性"><a href="#网络的非性能特性" class="headerlink" title="网络的非性能特性"></a>网络的非性能特性</h2><ol>
+<li>费用</li>
+<li>质量</li>
+<li>标准化</li>
+<li>可靠性</li>
+<li>可扩展性和可升级性 </li>
+<li>易于管理和维护 </li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-计算机网络课堂小记（1）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%881%EF%BC%89/"
+    >计算机网络课堂小记（1）</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E5%A0%82%E5%B0%8F%E8%AE%B0%EF%BC%881%EF%BC%89/" class="article-date">
+  <time datetime="2021-06-21T15:25:06.000Z" itemprop="datePublished">2021-06-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/">课堂笔记</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><p>该博客为个人学习计算机网络时候做的一些笔记，作者水平很有限，如有错误和理解不对之处，欢迎指出！！！谢谢谢谢！！！</p>
+<p>学习课本以及资料为谢希仁老师的《计算机网络（第七版）》以及《自顶向下》。课程为韩立刚老师的视频，强推该老师视频，很棒棒~</p>
+<h2 id="互连网和互联网"><a href="#互连网和互联网" class="headerlink" title="互连网和互联网"></a>互连网和互联网</h2><p>讲真，在此之前真没听说过还有互连网，还以为是老师的讲义打错了。这里有个常识性的概念知识，”internet“和“Internet”是不一样的。</p>
+<h3 id="互连网"><a href="#互连网" class="headerlink" title="互连网"></a>互连网</h3><p>“internet”是一个通用性的名词，泛指由多个计算机网络连接而成的网络，具体使用什么通行协议并不明确。由结点和链路连接成网络，再有路由来连接各个网络形成互连网。</p>
+<p>结点可以是计算机、交换机，也可以是路由器等等</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f1312192a8284244b46e8df635a063f4~tplv-k3u1fbpfcp-watermark.image" alt="image-20210309203157297.png"></p>
+<h3 id="互联网"><a href="#互联网" class="headerlink" title="互联网"></a>互联网</h3><p>“Internet”，这就是我们熟知的因特网。是一个采用了TCP/IP协议族，而且覆盖全球、资源共享的一个超大的互连网络。我的理解是互联网</p>
+<h2 id="互联网发展的三个阶段"><a href="#互联网发展的三个阶段" class="headerlink" title="互联网发展的三个阶段"></a>互联网发展的三个阶段</h2><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7572e9008aba4bc0b7c94b107f4009b7~tplv-k3u1fbpfcp-watermark.image" alt="image-20210309205407775.png"></p>
+<h3 id="第一阶段"><a href="#第一阶段" class="headerlink" title="第一阶段"></a>第一阶段</h3><p>最开始是出现了ARPNET单个网络，随后有了路由来将各个ARPNET网络连接起来，形成互联网。</p>
+<ol>
+<li>1983年，ARPNET上的标准协议改为TCP/IP，所以TCP/IP协议的计算机都可以通过互联网通信</li>
+<li>1983年也就被人们作为互联网的诞生时间</li>
+<li>1990年，ARPNET正式关闭，此时互联网的测试基本结束，开始了下一阶段</li>
+</ol>
+<h3 id="第二阶段"><a href="#第二阶段" class="headerlink" title="第二阶段"></a>第二阶段</h3><p>随后出现的是一个三级结构的互联网，形成了 <strong>主干网—地区网—校园网</strong> 的一个布局。由于最开始加入的多是科研机构和学校，随后越来越多的企业也加入了。</p>
+<h3 id="第三阶段"><a href="#第三阶段" class="headerlink" title="第三阶段"></a>第三阶段</h3><p>逐渐形成了多层次ISP结构的互联网（<em>LSP？？？</em>）</p>
+<ol>
+<li>出现了<strong>互联网服务提供者ISP</strong>（Internet Service Provider）<em>移动、电信（电信的校园网巨差，小声BB）</em></li>
+<li>只要向ISP缴纳费用，即可从ISP获取所需IP地址的使用权，通过ISP连入互联网</li>
+<li>根据覆盖面积的大小以及所有的IP地址和数目的不同，ISP也分为不同层级的ISP：主干ISP、地区ISP、本地ISP</li>
+</ol>
+<h2 id="ISP的分层："><a href="#ISP的分层：" class="headerlink" title="ISP的分层："></a>ISP的分层：</h2><h3 id="IXP"><a href="#IXP" class="headerlink" title="IXP"></a><strong>IXP</strong></h3><p>我们可以看到这个主机A如果要和主机B通信太麻烦了，绕了一个大弯子，这时候就有了<strong>IXP互联网交换点</strong>，在做为中间线路。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a><strong>其他</strong></h3><p>也有一些大公司直接接入主干ISP或者地区ISP，来提高自己的网络能力</p>
+<h3 id="带宽速度"><a href="#带宽速度" class="headerlink" title="带宽速度"></a><strong>带宽速度</strong></h3><p>你以为你以为的100M就是你以为吗？</p>
+<p>100M其实是到本地ISP的速度，但是其他地方的ISP呢？这时候是取决于速度最低的ISP</p>
+<h2 id="万维网"><a href="#万维网" class="headerlink" title="万维网"></a>万维网</h2><p>万维网是Internet上的应用，而这种应用也促进了Internet的发展</p>
+<h2 id="互联网协会ISOC"><a href="#互联网协会ISOC" class="headerlink" title="互联网协会ISOC"></a>互联网协会ISOC</h2><p>ISOC下有一个<strong>互联网体系结构研究委员会 IAB</strong>，该委员会下面又有两个部门：</p>
+<ol>
+<li><strong>互联网研究部IRTF</strong>，该研究部下面又有<strong>互联网研究指导小组IRSG</strong>来管理各个小组RG(research group)</li>
+<li><strong>互联网工程部IESG</strong>，该部门下面有<strong>互联网工程指导小组IESG</strong>来管理各个领域的不同小组WG(working group)</li>
+</ol>
+<h2 id="成为互联网正式标准的几个阶段"><a href="#成为互联网正式标准的几个阶段" class="headerlink" title="成为互联网正式标准的几个阶段"></a>成为互联网正式标准的几个阶段</h2><p><em>所有互联网标准应该以RFC的形式在网上发表</em></p>
+<h3 id="过去"><a href="#过去" class="headerlink" title="过去"></a>过去</h3><ol>
+<li>首先形成一个互联网草案(Internet Draft)，该草案有六个月的有效期，在此时还没有成为RFC文档</li>
+<li>接着需达到建议标准(Proposed Standard)，从此阶段开始成为RFC文档</li>
+<li>最后达到互联网标准(Internet Standard)，成为正式标准后，可以分到一个编号 STD XXXX，一个标准可以和多个RFC文档关联</li>
+</ol>
+<h3 id="现在"><a href="#现在" class="headerlink" title="现在"></a>现在</h3><p>现在变为两个阶段，建议标准和互联网标准</p>
+<p>其中，除了建议标准和互联网标准有RFC文档外，还有：</p>
+<ol>
+<li>实验RFC，实验成功成为建议标准，不成功变为历史的RFC (拜拜了您嘞)</li>
+<li>提供信息的RFC，这里是提供指导信息的RFC</li>
+<li>历史RFC(这就是被废弃的了)</li>
+</ol>
+<h2 id="互联网的组成"><a href="#互联网的组成" class="headerlink" title="互联网的组成"></a>互联网的组成</h2><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ee72ffb8872f4bf7b91335336ef60258~tplv-k3u1fbpfcp-watermark.image" alt="image-20210309212258016.png"></p>
+<h3 id="边缘部分："><a href="#边缘部分：" class="headerlink" title="边缘部分："></a>边缘部分：</h3><p>由所有连接在互联网上的主机组成，包括智能设备等等。这部分是用户直接使用的，用来通信和资源共享。</p>
+<ol>
+<li>在边缘部分的主机又称为<strong>端系统</strong>(end system)，端系统在功能上可能很不一样：<ol>
+<li>小型的：一个电脑也可，一个手机也可，一个智能联网手表也可，一个联网STM32小闹钟也可</li>
+<li>大型的：一个贼贵贼贵的超大计算机</li>
+<li>端系统的拥有着可以是个人、企业、学习、政府或者某个LSP</li>
+</ol>
+</li>
+</ol>
+<h3 id="核心部分："><a href="#核心部分：" class="headerlink" title="核心部分："></a>核心部分：</h3><p>这是由大量网络和路由器组成，核心部分给边缘部分提供服务(提供连通性和交换)</p>
+<h3 id="端系统之间通信的含义"><a href="#端系统之间通信的含义" class="headerlink" title="端系统之间通信的含义"></a>端系统之间通信的含义</h3><p>主机A和主机B之间的通信，其实是A上的某个程序和B上的某个程序通信。</p>
+<p><strong>端系统之间的通信方式</strong>：</p>
+<ol>
+<li>客户-服务器方式（C/S方式），也就是Client/Server方式，简称C/S方式</li>
+<li>对等方式（P2P），Peer-to-Peer方式</li>
+</ol>
+<h2 id="客服端的工作方式"><a href="#客服端的工作方式" class="headerlink" title="客服端的工作方式"></a>客服端的工作方式</h2><p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a8911658a02940779cba8186cf4e05a5~tplv-k3u1fbpfcp-watermark.image" alt="image-20210310134729577.png"></p>
+<h3 id="客户端软件的特点："><a href="#客户端软件的特点：" class="headerlink" title="客户端软件的特点："></a>客户端软件的特点：</h3><ol>
+<li>被用户调用后运行，在打算通信时<strong>主动</strong>向远地服务器发起通信（请求服务）。因此，客服软件必须指导服务器程序的地址。</li>
+<li>不需要特殊的硬件和很复杂的操作系统</li>
+</ol>
+<h3 id="服务器软件的特点："><a href="#服务器软件的特点：" class="headerlink" title="服务器软件的特点："></a>服务器软件的特点：</h3><ol>
+<li>一种专门提供某种服务的程序（例如web、DNS、FTP、SMTP等），可同时处理多个远地或本地客户的请求</li>
+<li>系统启动后自动调用并<strong>一直运行</strong>，<strong>被动的</strong>等待并接受来自各地的客户的通信请求。<strong>因此，服务器程序不需要知道客户程序的地址。</strong></li>
+<li>一般需要强大的硬件和高级的操作系统</li>
+</ol>
+<p><em>客户和服务器的通信关系建立后（三次握手与四次挥手？？），通信可以是双向的，两者皆可收发数据。</em></p>
+<h2 id="分组交换"><a href="#分组交换" class="headerlink" title="分组交换"></a>分组交换</h2><p>为了理解分组交换，可以先学习<strong>电路交换</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/df77a5f2e4f7485e826fce4c35e377aa~tplv-k3u1fbpfcp-watermark.image" alt="image-20210310202024846.png"></p>
+<h3 id="电路交换"><a href="#电路交换" class="headerlink" title="电路交换"></a>电路交换</h3><p>我们传统的电话通信就是电路交换的典型代表，这个方式整个过程如下：**建立连接(占用通信资源)-&gt;通话(一直占用通信资源)-&gt;释放连接(归还通信资源)**。从通信资源分配的角度来看，交换就是按照某种方式动态地分配传输线路的资源。从通话开始到通话结束，期间很多时间内，通信线路的资源都是被浪费的。</p>
+<h3 id="分组交换-1"><a href="#分组交换-1" class="headerlink" title="分组交换"></a>分组交换</h3><p>分组交换采用了<strong>存储转发技术</strong>（实质上是采用了在数据通信的过程中断续&lt;或动态&gt;分配传输带宽的策略），它是把一个<strong>报文(message)<strong>划分为几个分组后再进行传送，报文为要发送的整块数据。在发送报文之前，先把较长的报文划分成为一个个更小的等长数据段，在每一个数据段前面，加上一些由必要的控制信息组成的</strong>首部(header)<strong>，就构成了一个</strong>分组(packet)<strong>。</strong>多个分组组成报文。</strong>分组中的首部包含了诸如目的地址和源地址等重要控制信息，每一个分组才能在互联网中独立地选择传送路径，并被正确地交付到分组传输的终点。</p>
+<p>这样就很大程度上解决了电路交换中的一个<strong>效率</strong>的问题：</p>
+<ol>
+<li>电路交换是短跑比赛，同一条赛道，每一场比赛的比赛过程中只有一个选手使用。</li>
+<li>分组交换是马拉松比赛，同一条赛道，大家的速度不一样，可以跟得很紧，多数人压在第一道赛道上也是允许的</li>
+</ol>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/51b4e59b02d745b18286501a3dc7adb9~tplv-k3u1fbpfcp-watermark.image" alt="image-20210310200136461.png"></p>
+<p>位于网络边缘的主机和位于网络核心部分的路由器都是计算机，但它们的<strong>作用</strong>却很不一样。</p>
+<ul>
+<li><strong>主机</strong>是为用户进行信息处理的，可以和其他主机通过网络交换信息。</li>
+<li><strong>路由器</strong>则是专门进行分组交换的，路由器接收到一个报文，会先暂时存储，开始检查其报头，查找转发表，按照首部中的目的地址，找到合适的接口转发出去。各路由器之间必须经常交换彼此掌握的路由信息，以便创建和动态维护路由器中的转发表，是的转发表能够在整个网络拓补发生变化时及时更新。</li>
+</ul>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2c4e742482164fd796f27ba2121ee47a~tplv-k3u1fbpfcp-watermark.image" alt="image-20210310200951970.png"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-三次握手和四次挥手"
   class="article article-type-post"
   itemscope
@@ -524,357 +1279,14 @@
 </article>
 
     
-    <article
-  id="post-Java断点续传多线程下载器（2）-HttpURLConnection和IO流传输"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%882%EF%BC%89-HttpURLConnection%E5%92%8CIO%E6%B5%81%E4%BC%A0%E8%BE%93/"
-    >Java断点续传多线程下载器（2）-HttpURLConnection和IO流传输</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%882%EF%BC%89-HttpURLConnection%E5%92%8CIO%E6%B5%81%E4%BC%A0%E8%BE%93/" class="article-date">
-  <time datetime="2021-06-15T13:06:27.000Z" itemprop="datePublished">2021-06-15</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/">断点续传</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li>上回，咱把整个下载器的流程和原理给梳理一遍，很显然这里有几个重点知识点：如何和网络地址取得连接，也就是<strong>连接servlet</strong>以及<strong>IO流传输</strong>和<strong>线程池</strong>（想用线程池，多线程的三种创建只用过前两种）。</li>
-</ul>
-<hr>
-<h4 id="从HttpURLConnection开始"><a href="#从HttpURLConnection开始" class="headerlink" title="从HttpURLConnection开始"></a>从<strong>HttpURLConnection</strong>开始</h4><p>HttpURLConnection是Java提供的一个发起HTTP请求的基础类库，可以做到发起POST GET请求，我们这次只是需要获取和设置请求头来得到一些必要的文件信息等一些别的操作，相对来说比较简单。</p>
-<p>HttpURLConnection的封装比较简略，很多事情需要我们自己干，不过我们本次涉及到的操作不多，没啥所谓，基础的东西用就是了。</p>
-<h4 id="统计下涉及到的API"><a href="#统计下涉及到的API" class="headerlink" title="统计下涉及到的API"></a>统计下涉及到的API</h4><ul>
-<li><p>设置请求头：setRequestProperty</p>
-</li>
-<li><p>获取请求头：getHeaderField</p>
-</li>
-<li><p>连接超时： setConnectTimeout</p>
-</li>
-<li><p>获取状态码：getResponseCode</p>
-</li>
-</ul>
-<h4 id="用法和基本流程"><a href="#用法和基本流程" class="headerlink" title="用法和基本流程"></a>用法和基本流程</h4><ol>
-<li><p>第一步当然是建立连接</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URL url1 = <span class="keyword">new</span> URL(url);<span class="comment">//拿到一个URL对象</span></span><br><span class="line">HttpURLConnection httpURLConnection = (HttpURLConnection) url1.openConnection();</span><br><span class="line"><span class="comment">//利用HttpURLConnection对象从网络中获取网页数据</span></span><br></pre></td></tr></table></figure></li>
-<li><p>为了避免连接超时，设置一下连接超时的限制（HttpURLConnection是基于HTTP协议的，其底层通过socket通信实现。如果不设置超时（timeout），在网络异常的情况下，可能会导致程序僵死而不继续往下执行。）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">httpURLConnection.setConnectTimeout(<span class="number">6</span>*<span class="number">1000</span>);<span class="comment">//为了避免连接超时</span></span><br></pre></td></tr></table></figure></li>
-<li><p>正如我们之前所说的，我们可以对<code>Content-Range</code>字段进行设置，Content-Range：A-B 就是从第A个bytes开始下载到第B个bytes</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (...)&#123;</span><br><span class="line">        httpURLConnection.setRequestProperty(<span class="string">&quot;RANGE&quot;</span>,<span class="string">&quot;bytes=&quot;</span> + start + <span class="string">&quot;-&quot;</span> + end);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    	httpURLConnection.setRequestProperty(<span class="string">&quot;RANGE&quot;</span>,<span class="string">&quot;bytes&quot;</span> + start + <span class="string">&quot;-&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>当然还有获取大小</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> length = httpURLConnection.getContentLength();</span><br></pre></td></tr></table></figure></li>
-<li><p>获取请求头来得到 Etag </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, List&lt;String&gt;&gt; headerFields = httpUrlConnection.getHeaderFields();</span><br><span class="line">List&lt;String&gt; eTagList = headerFields.get(<span class="string">&quot;ETag&quot;</span>);</span><br></pre></td></tr></table></figure></li>
-<li><p>关闭连接</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">httpUrlConnection.disconnect();</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="IO流传输"><a href="#IO流传输" class="headerlink" title="IO流传输"></a>IO流传输</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>(InputStream inputStream = httpURLConnection.getInputStream();</span><br><span class="line">    BufferedInputStream bufferedInputStream = <span class="keyword">new</span> BufferedInputStream(inputStream);</span><br><span class="line">    RandomAccessFile randomAccessFile = <span class="keyword">new</span> RandomAccessFile(httpFileName,<span class="string">&quot;rw&quot;</span>))&#123;</span><br><span class="line">    randomAccessFile.seek(localFileContentLength);</span><br><span class="line">    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[BYTE_SIZE];</span><br><span class="line">    <span class="keyword">int</span> len = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> ((len = bufferedInputStream.read(bytes)) != -<span class="number">1</span>)&#123;</span><br><span class="line">        randomAccessFile.write(bytes,<span class="number">0</span>,len);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span>(...)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>这里就是通过IO流来写入文件的过程</li>
-<li>`InputStream inputStream = httpURLConnection.getInputStream();<pre><code>BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-RandomAccessFile randomAccessFile = new RandomAccessFile(httpFileName,&quot;rw&quot;)`
-</code></pre>
-</li>
-</ul>
-<p>这三行再try(…)，括号中的代码一般放的是对资源的申请，如果{}中的代码出项了异常，（）中的资源就会被关闭，这在inputstream和outputstream的使用中会很方便。网上搜索一波后：这是所谓的try-with-resources，自动资源管理，应该意思是括号里的资源，是语句末尾一定确保要关闭的。</p>
-<h4 id="Future模式"><a href="#Future模式" class="headerlink" title="Future模式"></a>Future模式</h4><p>这里是在学习了敖丙大佬的文章后，尝试写出来的。所以这个Future不就是个画大饼的渣男吗？？？</p>
-<p>废话不多说，直接上敖丙大佬链接<code>https://juejin.cn/post/6950065347227549703</code>！</p>
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p>这个是因为在测试的时候那个getContentLength()返回的一直是-1，懵掉了。</p>
-<p>然后再短暂的百度后，发现似乎有个参数问题没有注意：</p>
-<pre><code>`httpConnection.setRequestProperty(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36&quot;);`
-</code></pre>
-<p>这个User-Agent如果不设置，不就是相当于告诉别人我要爬你了吗？所以我们可以对这个参数做一下设置</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Java断点续传多线程下载器（1）-原理和构想"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%881%EF%BC%89-%E5%8E%9F%E7%90%86%E5%92%8C%E6%9E%84%E6%83%B3/"
-    >Java断点续传多线程下载器（1）-原理和构想</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%881%EF%BC%89-%E5%8E%9F%E7%90%86%E5%92%8C%E6%9E%84%E6%83%B3/" class="article-date">
-  <time datetime="2021-06-15T13:03:21.000Z" itemprop="datePublished">2021-06-15</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/">断点续传</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ul>
-<li> 刚刚学习了Java多线程基础和计算机网络等等，没个实践不得行，尝试着写一个Java多线程下载器来玩玩</li>
-</ul>
-<hr>
-<h4 id="前期的原理学习和项目构想"><a href="#前期的原理学习和项目构想" class="headerlink" title="前期的原理学习和项目构想"></a>前期的原理学习和项目构想</h4><h5 id="基础概念的疏导"><a href="#基础概念的疏导" class="headerlink" title="基础概念的疏导"></a>基础概念的疏导</h5><h6 id="第一眼看到断点续传多线程下载器时候发出的疑问？"><a href="#第一眼看到断点续传多线程下载器时候发出的疑问？" class="headerlink" title="第一眼看到断点续传多线程下载器时候发出的疑问？"></a>第一眼看到<code>断点续传多线程下载器</code>时候发出的疑问？</h6><p>这玩意第一眼看上去会出现很多问题也很正常嘛，绝对不只是因为我菜啊。我们平时最常用的下载器应该就是迅雷了，或者就是在浏览器上直接下载。如果让我自己来搞一个下载器的话，我的第一反应可能是个传输工具的demo吧。于是，出现了以下的问题：</p>
-<ul>
-<li><p>断点续传是啥？</p>
-</li>
-<li><p>多线程下载器是什么意思？</p>
-</li>
-<li><p>多线程下载和单线程下载比有啥更屌的吗？</p>
-</li>
-</ul>
-<ol>
-<li><p><strong>断点续传是啥</strong></p>
-<ul>
-<li><p><code>FTP（文件传输协议的简称）（File Transfer Protocol、 FTP）客户端软件断点续传指的是在下载或[上传](https://baike.baidu.com/item/上传/749624)时，将下载或上传任务（一个文件或一个[压缩包](https://baike.baidu.com/item/压缩包/5373066)）人为的划分为几个部分，每一个部分采用一个[线程](https://baike.baidu.com/item/线程/103101)进行上传或下载，如果碰到[网络故障](https://baike.baidu.com/item/网络故障/1391028)，可以从已经上传或下载的部分开始继续上传下载未完成的部分，而没有必要从头开始上传[下载](https://baike.baidu.com/item/下载/2270927)。用户可以节省时间，提高速度。</code></p>
-<pre><code>                                                                                                                                                —    一段百度百科送给大家
-</code></pre>
-</li>
-<li><p>说白了，就是我让你停你就停，下次让你继续，你就得哪里跌倒哪里爬起来。这个应该是一个下载器最基本的素质</p>
-</li>
-</ul>
-</li>
-<li><p><strong>多线程下载器是什么意思？</strong></p>
-<ul>
-<li>从我们直观的角度来看，我们在下载的时候会有一个进度条，我们可能会以为只有一个通道在下载文件，但其实可能不是，<code>线程和进程的概念</code>就不在这里做赘述了。在下载的时候，下载器会把一个文件分割成很多份，每一份交由一个线程来下载，这样子是不是感觉到会变快很多呢？</li>
-<li>所以，假如我开了N个线程，是不是就比单线程要快N倍呢？那岂不是线程越多越好？事实上，线程并不是越多越好，N个线程也不是比单个线程要快N倍。因为，从根本上来看，线程同步也不过是宏观上看，从CPU的角度来看，无非是多个线程在CPU规划好的时间片内轮流占有CPU资源。并不是真正意义上的<strong>齐头并进</strong>。那么，就牵扯出了下一个问题：</li>
-</ul>
-</li>
-<li><p><strong>多线程下载和单线程下载比有啥更屌的吗？</strong></p>
-<ul>
-<li><p>多线程屌还是屌的，至少学长是这样说的，那我不管，我只管研究它屌在哪里。既然我们说，多线程快，并不是快在它真的可以齐头并进，那么它快在哪里呢？ 这里就要牵扯出一个知识点了=&gt;<strong>拥塞避免算法</strong></p>
-<h5 id="拥塞避免算法："><a href="#拥塞避免算法：" class="headerlink" title="拥塞避免算法："></a>拥塞避免算法：</h5><pre><code>哈？关于这个知识点，我做了笔记的，**湖科大教书匠永远的神。**
-
-`拥塞避免算法的链接：`https://juejin.cn/post/6945802089050144805
-</code></pre>
-</li>
-<li><p>所以，单线程如果被拥塞避免算法卡了一刀，整个下载速度就真的被砍了一刀。鸡蛋不要放在同一个篮子里，如果我们开了多线程，只要不是所有进程都被砍了一刀，就一定比单线程被砍一刀要快。</p>
-</li>
-<li><p>当然，如果在整个下载过程根本没有发送IO阻塞，一点点都没有，那我觉得还是单线程更快。毕竟多线程的切换上下文会影响效率。</p>
-</li>
-</ul>
-</li>
-</ol>
-<h6 id="断点续传的实现原理"><a href="#断点续传的实现原理" class="headerlink" title="断点续传的实现原理"></a>断点续传的实现原理</h6><p>那行，我们了解了断点续传似乎是真的屌，就应该来思考如何来实现多线程断点续传了。因此，现在也遇到了新的疑问，：</p>
-<ul>
-<li><p>我怎么知道这个下载链接它给不给我断点续传？</p>
-</li>
-<li><p>我怎么把一个文件待传部分给切成多份给多线程？</p>
-</li>
-<li><p>如果我传了一半，过段时间源文件它更新了，怎么搞？</p>
-</li>
-<li><p>我知道可以断点续传了，也知道了文件有没有更新了，然后用多进程下载下来了，然后呢？</p>
-</li>
-</ul>
-<hr>
-<ol>
-<li><p><strong>我怎么知道这个下载链接它给不给我断点续传？</strong></p>
-<ul>
-<li>首先，咱要了解一下HTTP协议，HTTP协议从1.1开始支持获取文件的部分内容，这为并行下载以及断点续传提供了技术支持。</li>
-<li>在这个HTTP请求中有请求头<strong>Request header</strong> 和 响应头<strong>Response header</strong> 。如果响应头中有<code>Accept-Ranges: bytes //是否允许指定传输范围，bytes：范围请求的单位是 bytes（字节），none：不支持任何范围请求单位</code>这个字段，那好，你可以断点续传。<code>哪里趴下，哪里站起来，不然的话，从头来过吧，和打游戏档被人删了一样。</code></li>
-</ul>
-</li>
-<li><p><strong>我怎么把一个文件待传部分给切成多份给多线程？</strong></p>
-<ul>
-<li>我们可以对<code>Content-Range</code>字段进行设置，Content-Range：A-B 就是从第A个bytes开始下载到第B个bytes</li>
-</ul>
-</li>
-<li><p><strong>如果我传了一半，过段时间源文件它更新了，怎么搞？</strong></p>
-<ul>
-<li>对于这个问题，我们可以有两个关键字：<code>ETag</code>和<code>Last-Modified</code>.</li>
-<li><code>Last-Modified</code>可以记录该文件最后更新的时间戳，以此来判断文件是否有做过修改，有的文件可能会周期性的修改，有的文件可能修改得贼拉快，有的服务器可能时间记录的不准，所以该字段似乎并不能够完全证明文件内容被修改过。</li>
-<li><code>ETag</code>是一个和文件相关的标记，可以是一个版本标记，可以理解成文件的指纹，但是 HTTP/1.1 标准并没有规定 Etag 的内容是什么或者说要怎么实现，唯一规定的是 Etag 需要放在 “ ” 内。</li>
-</ul>
-</li>
-<li><p><strong>我知道可以断点续传了，也知道了文件有没有更新了，然后用多进程下载下来了，然后呢？</strong></p>
-<ul>
-<li>然后就可以使用 <code>RandomAccessFile</code> 把下载的临时文件合并成一个文件了呀，然后这个项目的第一个版本就出现了呀</li>
-</ul>
-</li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-about"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/about/"
-    >关于我</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/about/" class="article-date">
-  <time datetime="2021-06-13T13:45:49.000Z" itemprop="datePublished">2021-06-13</time>
-</a>  
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>我是Xavi，如果累了，来杯马黛茶吧！</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xavi/" rel="tag">Xavi</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Mysql索引类型都有啥？"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/"
-    >MySQL索引类型都有啥？</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/" class="article-date">
-  <time datetime="2021-06-12T13:37:42.000Z" itemprop="datePublished">2021-06-12</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="数据库的索引类型"><a href="#数据库的索引类型" class="headerlink" title="数据库的索引类型"></a>数据库的索引类型</h1><h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><ul>
-<li>普通索引允许索引内容有重复数据，任务是为了加快对数据的访问速度。没什么特别的要求，只要它是查询的条件，就可以给它加上普通索引</li>
-</ul>
-<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><ul>
-<li><p>唯一索引相对于普通索引就有了一个条件，那就是索引列的值不可以重复，但是可以为空。很显然，拿个人信息库来举例的话，身份证号很合适，或者创建时给予的序号或工号、学号这种不会重复的值。想年龄、性别就不可以，名字也会有重名的（张伟震怒）。</p>
-</li>
-<li><p>所以唯一索引在插入时就需要先检查该索引数据是否在数据库中已经有了，在进行添加。</p> 
-      <a class="article-more-link" href="/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
   </article>
   
 
+  
+  <nav class="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+  </nav>
   
 </section>
 </div>

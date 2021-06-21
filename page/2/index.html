@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="Xavi的Hexo博客" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title> Life Is a Movie！</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    <link rel="alternate" href="/atom.xml" title="Life Is a Movie！" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      <canvas class="fireworks"></canvas>
+      <style>
+        .fireworks {
+          position: fixed;
+          left: 0;
+          top: 0;
+          z-index: 99999;
+          pointer-events: none;
+        }
+      </style>
+      
+      
+    <main class="content on">
+      
+<section class="cover">
+    
+  <div class="cover-frame">
+    <div class="bg-box">
+      <img src="/images/cover1.jpg" alt="image frame" />
+    </div>
+    <div class="cover-inner text-center text-white">
+      <h1><a href="/">Life Is a Movie！</a></h1>
+      <div id="subtitle-box">
+        
+        <span id="subtitle"></span>
+        
+      </div>
+      <div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="cover-learn-more">
+    <a href="javascript:void(0)" class="anchor"><i class="ri-arrow-down-line"></i></a>
+  </div>
+</section>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js"></script>
+
+
+<!-- Subtitle -->
+
+  <script>
+    try {
+      var typed = new Typed("#subtitle", {
+        strings: ['累了就休息一下，喝口马黛茶', '世界上只有一种英雄主义,就是看清生活的真相之后依然热爱生活。', '想要的都拥有，得不到的都释怀'],
+        startDelay: 0,
+        typeSpeed: 200,
+        loop: true,
+        backSpeed: 100,
+        showCursor: true
+      });
+    } catch (err) {
+      console.log(err)
+    }
+  </script>
+  
+<div id="main">
+  <section class="outer">
+  
+  
+  
+
+<div class="notice" style="margin-top:50px">
+    <i class="ri-heart-fill"></i>
+    <div class="notice-content" id="broad"></div>
+</div>
+<script type="text/javascript">
+    fetch('https://v1.hitokoto.cn')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("broad").innerHTML = data.hitokoto;
+        })
+        .catch(console.error)
+</script>
+
+<style>
+    .notice {
+        padding: 20px;
+        border: 1px dashed #e6e6e6;
+        color: #969696;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        background: #fbfbfb50;
+        border-radius: 10px;
+    }
+
+    .notice i {
+        float: left;
+        color: #999;
+        font-size: 16px;
+        padding-right: 10px;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+
+    .notice-content {
+        display: initial;
+        vertical-align: middle;
+    }
+</style>
+  
+  <article class="articles">
+    
+    
+    
+    
+    <article
+  id="post-Java断点续传多线程下载器（2）-HttpURLConnection和IO流传输"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%882%EF%BC%89-HttpURLConnection%E5%92%8CIO%E6%B5%81%E4%BC%A0%E8%BE%93/"
+    >Java断点续传多线程下载器（2）-HttpURLConnection和IO流传输</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%882%EF%BC%89-HttpURLConnection%E5%92%8CIO%E6%B5%81%E4%BC%A0%E8%BE%93/" class="article-date">
+  <time datetime="2021-06-15T13:06:27.000Z" itemprop="datePublished">2021-06-15</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/">断点续传</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li>上回，咱把整个下载器的流程和原理给梳理一遍，很显然这里有几个重点知识点：如何和网络地址取得连接，也就是<strong>连接servlet</strong>以及<strong>IO流传输</strong>和<strong>线程池</strong>（想用线程池，多线程的三种创建只用过前两种）。</li>
+</ul>
+<hr>
+<h4 id="从HttpURLConnection开始"><a href="#从HttpURLConnection开始" class="headerlink" title="从HttpURLConnection开始"></a>从<strong>HttpURLConnection</strong>开始</h4><p>HttpURLConnection是Java提供的一个发起HTTP请求的基础类库，可以做到发起POST GET请求，我们这次只是需要获取和设置请求头来得到一些必要的文件信息等一些别的操作，相对来说比较简单。</p>
+<p>HttpURLConnection的封装比较简略，很多事情需要我们自己干，不过我们本次涉及到的操作不多，没啥所谓，基础的东西用就是了。</p>
+<h4 id="统计下涉及到的API"><a href="#统计下涉及到的API" class="headerlink" title="统计下涉及到的API"></a>统计下涉及到的API</h4><ul>
+<li><p>设置请求头：setRequestProperty</p>
+</li>
+<li><p>获取请求头：getHeaderField</p>
+</li>
+<li><p>连接超时： setConnectTimeout</p>
+</li>
+<li><p>获取状态码：getResponseCode</p>
+</li>
+</ul>
+<h4 id="用法和基本流程"><a href="#用法和基本流程" class="headerlink" title="用法和基本流程"></a>用法和基本流程</h4><ol>
+<li><p>第一步当然是建立连接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URL url1 = <span class="keyword">new</span> URL(url);<span class="comment">//拿到一个URL对象</span></span><br><span class="line">HttpURLConnection httpURLConnection = (HttpURLConnection) url1.openConnection();</span><br><span class="line"><span class="comment">//利用HttpURLConnection对象从网络中获取网页数据</span></span><br></pre></td></tr></table></figure></li>
+<li><p>为了避免连接超时，设置一下连接超时的限制（HttpURLConnection是基于HTTP协议的，其底层通过socket通信实现。如果不设置超时（timeout），在网络异常的情况下，可能会导致程序僵死而不继续往下执行。）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">httpURLConnection.setConnectTimeout(<span class="number">6</span>*<span class="number">1000</span>);<span class="comment">//为了避免连接超时</span></span><br></pre></td></tr></table></figure></li>
+<li><p>正如我们之前所说的，我们可以对<code>Content-Range</code>字段进行设置，Content-Range：A-B 就是从第A个bytes开始下载到第B个bytes</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (...)&#123;</span><br><span class="line">        httpURLConnection.setRequestProperty(<span class="string">&quot;RANGE&quot;</span>,<span class="string">&quot;bytes=&quot;</span> + start + <span class="string">&quot;-&quot;</span> + end);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    	httpURLConnection.setRequestProperty(<span class="string">&quot;RANGE&quot;</span>,<span class="string">&quot;bytes&quot;</span> + start + <span class="string">&quot;-&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>当然还有获取大小</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> length = httpURLConnection.getContentLength();</span><br></pre></td></tr></table></figure></li>
+<li><p>获取请求头来得到 Etag </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, List&lt;String&gt;&gt; headerFields = httpUrlConnection.getHeaderFields();</span><br><span class="line">List&lt;String&gt; eTagList = headerFields.get(<span class="string">&quot;ETag&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+<li><p>关闭连接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">httpUrlConnection.disconnect();</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="IO流传输"><a href="#IO流传输" class="headerlink" title="IO流传输"></a>IO流传输</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>(InputStream inputStream = httpURLConnection.getInputStream();</span><br><span class="line">    BufferedInputStream bufferedInputStream = <span class="keyword">new</span> BufferedInputStream(inputStream);</span><br><span class="line">    RandomAccessFile randomAccessFile = <span class="keyword">new</span> RandomAccessFile(httpFileName,<span class="string">&quot;rw&quot;</span>))&#123;</span><br><span class="line">    randomAccessFile.seek(localFileContentLength);</span><br><span class="line">    <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[BYTE_SIZE];</span><br><span class="line">    <span class="keyword">int</span> len = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> ((len = bufferedInputStream.read(bytes)) != -<span class="number">1</span>)&#123;</span><br><span class="line">        randomAccessFile.write(bytes,<span class="number">0</span>,len);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span>(...)&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里就是通过IO流来写入文件的过程</li>
+<li>`InputStream inputStream = httpURLConnection.getInputStream();<pre><code>BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+RandomAccessFile randomAccessFile = new RandomAccessFile(httpFileName,&quot;rw&quot;)`
+</code></pre>
+</li>
+</ul>
+<p>这三行再try(…)，括号中的代码一般放的是对资源的申请，如果{}中的代码出项了异常，（）中的资源就会被关闭，这在inputstream和outputstream的使用中会很方便。网上搜索一波后：这是所谓的try-with-resources，自动资源管理，应该意思是括号里的资源，是语句末尾一定确保要关闭的。</p>
+<h4 id="Future模式"><a href="#Future模式" class="headerlink" title="Future模式"></a>Future模式</h4><p>这里是在学习了敖丙大佬的文章后，尝试写出来的。所以这个Future不就是个画大饼的渣男吗？？？</p>
+<p>废话不多说，直接上敖丙大佬链接<code>https://juejin.cn/post/6950065347227549703</code>！</p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p>这个是因为在测试的时候那个getContentLength()返回的一直是-1，懵掉了。</p>
+<p>然后再短暂的百度后，发现似乎有个参数问题没有注意：</p>
+<pre><code>`httpConnection.setRequestProperty(&quot;User-Agent&quot;, &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36&quot;);`
+</code></pre>
+<p>这个User-Agent如果不设置，不就是相当于告诉别人我要爬你了吗？所以我们可以对这个参数做一下设置</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Java断点续传多线程下载器（1）-原理和构想"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%881%EF%BC%89-%E5%8E%9F%E7%90%86%E5%92%8C%E6%9E%84%E6%83%B3/"
+    >Java断点续传多线程下载器（1）-原理和构想</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/Java%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD%E5%99%A8%EF%BC%881%EF%BC%89-%E5%8E%9F%E7%90%86%E5%92%8C%E6%9E%84%E6%83%B3/" class="article-date">
+  <time datetime="2021-06-15T13:03:21.000Z" itemprop="datePublished">2021-06-15</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/">断点续传</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <ul>
+<li> 刚刚学习了Java多线程基础和计算机网络等等，没个实践不得行，尝试着写一个Java多线程下载器来玩玩</li>
+</ul>
+<hr>
+<h4 id="前期的原理学习和项目构想"><a href="#前期的原理学习和项目构想" class="headerlink" title="前期的原理学习和项目构想"></a>前期的原理学习和项目构想</h4><h5 id="基础概念的疏导"><a href="#基础概念的疏导" class="headerlink" title="基础概念的疏导"></a>基础概念的疏导</h5><h6 id="第一眼看到断点续传多线程下载器时候发出的疑问？"><a href="#第一眼看到断点续传多线程下载器时候发出的疑问？" class="headerlink" title="第一眼看到断点续传多线程下载器时候发出的疑问？"></a>第一眼看到<code>断点续传多线程下载器</code>时候发出的疑问？</h6><p>这玩意第一眼看上去会出现很多问题也很正常嘛，绝对不只是因为我菜啊。我们平时最常用的下载器应该就是迅雷了，或者就是在浏览器上直接下载。如果让我自己来搞一个下载器的话，我的第一反应可能是个传输工具的demo吧。于是，出现了以下的问题：</p>
+<ul>
+<li><p>断点续传是啥？</p>
+</li>
+<li><p>多线程下载器是什么意思？</p>
+</li>
+<li><p>多线程下载和单线程下载比有啥更屌的吗？</p>
+</li>
+</ul>
+<ol>
+<li><p><strong>断点续传是啥</strong></p>
+<ul>
+<li><p><code>FTP（文件传输协议的简称）（File Transfer Protocol、 FTP）客户端软件断点续传指的是在下载或[上传](https://baike.baidu.com/item/上传/749624)时，将下载或上传任务（一个文件或一个[压缩包](https://baike.baidu.com/item/压缩包/5373066)）人为的划分为几个部分，每一个部分采用一个[线程](https://baike.baidu.com/item/线程/103101)进行上传或下载，如果碰到[网络故障](https://baike.baidu.com/item/网络故障/1391028)，可以从已经上传或下载的部分开始继续上传下载未完成的部分，而没有必要从头开始上传[下载](https://baike.baidu.com/item/下载/2270927)。用户可以节省时间，提高速度。</code></p>
+<pre><code>                                                                                                                                                —    一段百度百科送给大家
+</code></pre>
+</li>
+<li><p>说白了，就是我让你停你就停，下次让你继续，你就得哪里跌倒哪里爬起来。这个应该是一个下载器最基本的素质</p>
+</li>
+</ul>
+</li>
+<li><p><strong>多线程下载器是什么意思？</strong></p>
+<ul>
+<li>从我们直观的角度来看，我们在下载的时候会有一个进度条，我们可能会以为只有一个通道在下载文件，但其实可能不是，<code>线程和进程的概念</code>就不在这里做赘述了。在下载的时候，下载器会把一个文件分割成很多份，每一份交由一个线程来下载，这样子是不是感觉到会变快很多呢？</li>
+<li>所以，假如我开了N个线程，是不是就比单线程要快N倍呢？那岂不是线程越多越好？事实上，线程并不是越多越好，N个线程也不是比单个线程要快N倍。因为，从根本上来看，线程同步也不过是宏观上看，从CPU的角度来看，无非是多个线程在CPU规划好的时间片内轮流占有CPU资源。并不是真正意义上的<strong>齐头并进</strong>。那么，就牵扯出了下一个问题：</li>
+</ul>
+</li>
+<li><p><strong>多线程下载和单线程下载比有啥更屌的吗？</strong></p>
+<ul>
+<li><p>多线程屌还是屌的，至少学长是这样说的，那我不管，我只管研究它屌在哪里。既然我们说，多线程快，并不是快在它真的可以齐头并进，那么它快在哪里呢？ 这里就要牵扯出一个知识点了=&gt;<strong>拥塞避免算法</strong></p>
+<h5 id="拥塞避免算法："><a href="#拥塞避免算法：" class="headerlink" title="拥塞避免算法："></a>拥塞避免算法：</h5><pre><code>哈？关于这个知识点，我做了笔记的，**湖科大教书匠永远的神。**
+
+`拥塞避免算法的链接：`https://juejin.cn/post/6945802089050144805
+</code></pre>
+</li>
+<li><p>所以，单线程如果被拥塞避免算法卡了一刀，整个下载速度就真的被砍了一刀。鸡蛋不要放在同一个篮子里，如果我们开了多线程，只要不是所有进程都被砍了一刀，就一定比单线程被砍一刀要快。</p>
+</li>
+<li><p>当然，如果在整个下载过程根本没有发送IO阻塞，一点点都没有，那我觉得还是单线程更快。毕竟多线程的切换上下文会影响效率。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h6 id="断点续传的实现原理"><a href="#断点续传的实现原理" class="headerlink" title="断点续传的实现原理"></a>断点续传的实现原理</h6><p>那行，我们了解了断点续传似乎是真的屌，就应该来思考如何来实现多线程断点续传了。因此，现在也遇到了新的疑问，：</p>
+<ul>
+<li><p>我怎么知道这个下载链接它给不给我断点续传？</p>
+</li>
+<li><p>我怎么把一个文件待传部分给切成多份给多线程？</p>
+</li>
+<li><p>如果我传了一半，过段时间源文件它更新了，怎么搞？</p>
+</li>
+<li><p>我知道可以断点续传了，也知道了文件有没有更新了，然后用多进程下载下来了，然后呢？</p>
+</li>
+</ul>
+<hr>
+<ol>
+<li><p><strong>我怎么知道这个下载链接它给不给我断点续传？</strong></p>
+<ul>
+<li>首先，咱要了解一下HTTP协议，HTTP协议从1.1开始支持获取文件的部分内容，这为并行下载以及断点续传提供了技术支持。</li>
+<li>在这个HTTP请求中有请求头<strong>Request header</strong> 和 响应头<strong>Response header</strong> 。如果响应头中有<code>Accept-Ranges: bytes //是否允许指定传输范围，bytes：范围请求的单位是 bytes（字节），none：不支持任何范围请求单位</code>这个字段，那好，你可以断点续传。<code>哪里趴下，哪里站起来，不然的话，从头来过吧，和打游戏档被人删了一样。</code></li>
+</ul>
+</li>
+<li><p><strong>我怎么把一个文件待传部分给切成多份给多线程？</strong></p>
+<ul>
+<li>我们可以对<code>Content-Range</code>字段进行设置，Content-Range：A-B 就是从第A个bytes开始下载到第B个bytes</li>
+</ul>
+</li>
+<li><p><strong>如果我传了一半，过段时间源文件它更新了，怎么搞？</strong></p>
+<ul>
+<li>对于这个问题，我们可以有两个关键字：<code>ETag</code>和<code>Last-Modified</code>.</li>
+<li><code>Last-Modified</code>可以记录该文件最后更新的时间戳，以此来判断文件是否有做过修改，有的文件可能会周期性的修改，有的文件可能修改得贼拉快，有的服务器可能时间记录的不准，所以该字段似乎并不能够完全证明文件内容被修改过。</li>
+<li><code>ETag</code>是一个和文件相关的标记，可以是一个版本标记，可以理解成文件的指纹，但是 HTTP/1.1 标准并没有规定 Etag 的内容是什么或者说要怎么实现，唯一规定的是 Etag 需要放在 “ ” 内。</li>
+</ul>
+</li>
+<li><p><strong>我知道可以断点续传了，也知道了文件有没有更新了，然后用多进程下载下来了，然后呢？</strong></p>
+<ul>
+<li>然后就可以使用 <code>RandomAccessFile</code> 把下载的临时文件合并成一个文件了呀，然后这个项目的第一个版本就出现了呀</li>
+</ul>
+</li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-about"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/about/"
+    >关于我</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/about/" class="article-date">
+  <time datetime="2021-06-13T13:45:49.000Z" itemprop="datePublished">2021-06-13</time>
+</a>  
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>我是Xavi，如果累了，来杯马黛茶吧！</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xavi/" rel="tag">Xavi</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Mysql索引类型都有啥？"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/"
+    >MySQL索引类型都有啥？</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/" class="article-date">
+  <time datetime="2021-06-12T13:37:42.000Z" itemprop="datePublished">2021-06-12</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="数据库的索引类型"><a href="#数据库的索引类型" class="headerlink" title="数据库的索引类型"></a>数据库的索引类型</h1><h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><ul>
+<li>普通索引允许索引内容有重复数据，任务是为了加快对数据的访问速度。没什么特别的要求，只要它是查询的条件，就可以给它加上普通索引</li>
+</ul>
+<h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><ul>
+<li><p>唯一索引相对于普通索引就有了一个条件，那就是索引列的值不可以重复，但是可以为空。很显然，拿个人信息库来举例的话，身份证号很合适，或者创建时给予的序号或工号、学号这种不会重复的值。想年龄、性别就不可以，名字也会有重名的（张伟震怒）。</p>
+</li>
+<li><p>所以唯一索引在插入时就需要先检查该索引数据是否在数据库中已经有了，在进行添加。</p> 
+      <a class="article-more-link" href="/2021/MySQL%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E9%83%BD%E6%9C%89%E5%95%A5%EF%BC%9F/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+  </article>
+  
+
+  
+  <nav class="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+  
+</section>
+</div>
+
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2021
+        <i class="ri-heart-fill heart_icon"></i> Xavi
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.jpg" alt="Life Is a Movie！"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2021/about">关于我</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/%E6%84%9F%E6%82%9F/">感悟</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script>
+
+<script src="/js/clickBoom1.js"></script>
+ 
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+ 
+<script src="/js/dz.js"></script>
+ 
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    <div id="music">
+    
+    
+    
+    <iframe frameborder="no" border="1" marginwidth="0" marginheight="0" width="200" height="52"
+        src="//music.163.com/outchain/player?type=2&id=1840862630&auto=1&height=32"></iframe>
+</div>
+
+<style>
+    #music {
+        position: fixed;
+        right: 15px;
+        bottom: 0;
+        z-index: 998;
+    }
+</style>
+    
+  </div>
+</body>
+
+</html>
